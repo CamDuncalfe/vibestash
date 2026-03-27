@@ -64,7 +64,7 @@ export default async function ToolDetailPage({ params, searchParams }: ToolDetai
     .from('products')
     .select('*', { count: 'exact' })
     .eq('approved', true)
-    .filter('tools_used', 'cs', `{${typedTool.name}}`)
+    .filter('tools_used', 'cs', `{${typedTool.slug}}`)
     .order('likes_count', { ascending: false })
     .order('created_at', { ascending: false })
     .range(from, to);
