@@ -1,17 +1,24 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { ProductGrid } from '@/components/products/ProductGrid';
 import type { Tool, Product } from '@/types';
 import type { Metadata } from 'next';
+import { Pagination } from '@/components/products/Pagination';
+
+const PRODUCTS_PER_PAGE = 24;
 
 interface ToolDetailPageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
 export async function generateMetadata({
   params,
-}: ToolDetailPageProps): Promise<Metadata> {
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const supabase = await createClient();
 
@@ -26,13 +33,16 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${tool.name} — VibeStash`,
-    description: tool.description ?? `Products built with ${tool.name}`,
+    title: `Products built with ${tool.name} | VibeStash`,
+    description: tool.description ?? `Discover vibe-coded apps and products built using ${tool.name}.`,
   };
 }
 
-export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
+export default async function ToolDetailPage({ params, searchParams }: ToolDetailPageProps) {
   const { slug } = await params;
+  const sp = await searchParams;
+  const currentPage = Math.max(1, parseInt(sp.page || '1', 10));
+
   const supabase = await createClient();
 
   const { data: tool } = await supabase
@@ -47,65 +57,56 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
 
   const typedTool = tool as Tool;
 
-  const { data: products } = await supabase
+  const from = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const to = from + PRODUCTS_PER_PAGE - 1;
+
+  const { data: products, count } = await supabase
     .from('products')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('approved', true)
     .filter('tools_used', 'cs', `{${typedTool.name}}`)
-    .order('created_at', { ascending: false });
+    .order('likes_count', { ascending: false })
+    .order('created_at', { ascending: false })
+    .range(from, to);
 
   const allProducts = (products as Product[]) ?? [];
+  const totalPages = Math.ceil((count || 0) / PRODUCTS_PER_PAGE);
 
   return (
-    <main className="max-w-6xl mx-auto px-4 py-12">
-      <div className="mb-10">
-        <Link
-          href="/tools"
-          className="text-sm text-gray-400 hover:text-[#FF6B35] transition-colors"
-        >
-          &larr; All Tools
-        </Link>
-
-        <h1 className="mt-4 text-3xl font-bold text-[#1a1a1a]">
+    <div className="min-h-screen bg-[#fafafa]">
+      <section className="pt-16 pb-12 px-6 text-center">
+        <div className="mb-4">
+          <Link
+            href="/tools"
+            className="text-sm text-gray-400 hover:text-[#FF6B35] transition-colors"
+          >
+            &larr; All Tools
+          </Link>
+        </div>
+        <h1 className="text-4xl sm:text-5xl font-bold text-[#1a1a1a] tracking-tight max-w-3xl mx-auto leading-tight">
           {typedTool.name}
         </h1>
-
         {typedTool.description && (
-          <p className="mt-2 text-gray-500">{typedTool.description}</p>
+          <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
+            {typedTool.description}
+          </p>
         )}
+        <p className="mt-2 text-sm text-gray-400">
+          {count || 0} {(count || 0) === 1 ? 'product' : 'products'} built with {typedTool.name}
+        </p>
+      </section>
 
-        <div className="mt-4 flex items-center gap-4">
-          {typedTool.url && (
-            <a
-              href={typedTool.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-[#FF6B35] hover:underline"
-            >
-              Visit website
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </a>
-          )}
-          <span className="text-sm text-gray-400">
-            {allProducts.length} product{allProducts.length !== 1 ? 's' : ''}
-          </span>
-        </div>
+      <div className="max-w-6xl mx-auto px-6">
+        <section>
+          <ProductGrid products={allProducts} />
+        </section>
+
+        <Suspense fallback={null}>
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
+        </Suspense>
+
+        <div className="h-12" />
       </div>
-
-      <ProductGrid products={allProducts} />
-    </main>
+    </div>
   );
 }

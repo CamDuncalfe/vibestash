@@ -36,6 +36,8 @@ export default async function Page({
     .from('products')
     .select('*', { count: 'exact' })
     .eq('approved', true)
+    .order('featured', { ascending: false })
+    .order('likes_count', { ascending: false })
     .order('created_at', { ascending: false });
 
   if (activeCategoryName) {

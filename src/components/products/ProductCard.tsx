@@ -5,11 +5,16 @@ import Image from 'next/image';
 import type { Product } from '@/types';
 import { LikeButton } from './LikeButton';
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, showFeaturedBadge }: { product: Product; showFeaturedBadge?: boolean }) {
   return (
     <Link href={`/products/${product.slug}`} className="group block">
       <div className="bg-white rounded-lg border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
         <div className="aspect-[16/10] bg-gray-100 relative overflow-hidden">
+          {showFeaturedBadge && product.featured && (
+            <span className="absolute top-2 left-2 z-10 text-[11px] font-semibold px-2 py-0.5 bg-amber-400 text-amber-900 rounded-full shadow-sm">
+              Staff Pick
+            </span>
+          )}
           {product.thumbnail_url ? (
             <Image
               src={product.thumbnail_url}
