@@ -9,6 +9,7 @@ export interface Product {
   maker_name: string | null;
   maker_url: string | null;
   maker_avatar_url: string | null;
+  maker_twitter: string | null;
   tools_used: string[];
   categories: string[];
   tech_stack: string[];
@@ -19,6 +20,7 @@ export interface Product {
   approved_at: string | null;
   views_count: number;
   likes_count: number;
+  upvotes_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -62,6 +64,13 @@ export interface CollectionItem {
 }
 
 export interface Like {
+  id: string;
+  user_id: string;
+  product_id: string;
+  created_at: string;
+}
+
+export interface Upvote {
   id: string;
   user_id: string;
   product_id: string;

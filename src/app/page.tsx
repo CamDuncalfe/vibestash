@@ -37,6 +37,7 @@ export default async function Page({
     .select('*', { count: 'exact' })
     .eq('approved', true)
     .order('featured', { ascending: false })
+    .order('upvotes_count', { ascending: false })
     .order('likes_count', { ascending: false })
     .order('created_at', { ascending: false });
 

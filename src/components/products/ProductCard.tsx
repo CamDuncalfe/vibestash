@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Product } from '@/types';
 import { LikeButton } from './LikeButton';
+import { UpvoteButton } from './UpvoteButton';
 
 export function ProductCard({ product, showFeaturedBadge }: { product: Product; showFeaturedBadge?: boolean }) {
   return (
@@ -36,7 +37,10 @@ export function ProductCard({ product, showFeaturedBadge }: { product: Product; 
             <h3 className="font-semibold text-[#1a1a1a] text-sm leading-tight">
               {product.title}
             </h3>
-            <LikeButton productId={product.id} initialCount={product.likes_count} />
+            <div className="flex items-center gap-2 shrink-0">
+              <UpvoteButton productId={product.id} initialCount={product.upvotes_count} />
+              <LikeButton productId={product.id} initialCount={product.likes_count} />
+            </div>
           </div>
           {product.tools_used.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-2.5">
@@ -67,8 +71,24 @@ export function ProductCard({ product, showFeaturedBadge }: { product: Product; 
               ))}
             </div>
           )}
-          {product.maker_name && (
-            <p className="text-xs text-gray-400 mt-2.5">by {product.maker_name}</p>
+          {(product.maker_name || product.maker_twitter) && (
+            <p className="text-xs text-gray-400 mt-2.5">
+              by {product.maker_name || 'Unknown'}
+              {product.maker_twitter && (
+                <>
+                  {' '}·{' '}
+                  <a
+                    href={`https://x.com/${product.maker_twitter.replace('@', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#FF6B35] hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {product.maker_twitter}
+                  </a>
+                </>
+              )}
+            </p>
           )}
         </div>
       </div>

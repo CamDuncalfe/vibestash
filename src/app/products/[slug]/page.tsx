@@ -7,6 +7,7 @@ import type { Product } from '@/types';
 import { ProductGrid } from '@/components/products/ProductGrid';
 import { ToolBadge } from '@/components/tools/ToolBadge';
 import { LikeButton } from '@/components/products/LikeButton';
+import { UpvoteButton } from '@/components/products/UpvoteButton';
 import { ScreenshotGallery } from '@/components/products/ScreenshotGallery';
 
 interface PageProps {
@@ -175,13 +176,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
         )}
 
         {/* Maker Info */}
-        {p.maker_name && (
+        {(p.maker_name || p.maker_twitter) && (
           <div className="mb-8 flex items-center gap-3">
             {p.maker_avatar_url && (
               <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-100">
                 <Image
                   src={p.maker_avatar_url}
-                  alt={p.maker_name}
+                  alt={p.maker_name || 'Maker'}
                   fill
                   className="object-cover"
                   sizes="40px"
@@ -190,24 +191,37 @@ export default async function ProductDetailPage({ params }: PageProps) {
             )}
             <div>
               <p className="text-sm text-gray-400">Made by</p>
-              {p.maker_url ? (
-                <a
-                  href={p.maker_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-[#1a1a1a] hover:text-[#FF6B35] transition-colors"
-                >
-                  {p.maker_name}
+              <div className="flex items-center gap-2">
+                {p.maker_url ? (
+                  <a
+                    href={p.maker_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-[#1a1a1a] hover:text-[#FF6B35] transition-colors"
+                  >
+                    {p.maker_name || 'Unknown'}
                 </a>
               ) : (
-                <p className="text-sm font-medium text-[#1a1a1a]">{p.maker_name}</p>
+                <p className="text-sm font-medium text-[#1a1a1a]">{p.maker_name || 'Unknown'}</p>
               )}
+              {p.maker_twitter && (
+                <a
+                  href={`https://x.com/${p.maker_twitter.replace('@', '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-[#FF6B35] hover:underline"
+                >
+                  {p.maker_twitter}
+                </a>
+              )}
+              </div>
             </div>
           </div>
         )}
 
-        {/* Like Button */}
-        <div className="mb-12">
+        {/* Engagement Buttons */}
+        <div className="flex items-center gap-3 mb-12">
+          <UpvoteButton productId={p.id} initialCount={p.upvotes_count} />
           <LikeButton productId={p.id} initialCount={p.likes_count} />
         </div>
 
