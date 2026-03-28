@@ -67,6 +67,23 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "VibeStash",
+              url: "https://vibestash.fun",
+              description: "A curated gallery of the best vibe-coded apps and products",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: "https://vibestash.fun/?search={search_term_string}",
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
         <script defer src="https://cloud.umami.is/script.js" data-website-id="c77b7ae8-8600-4b8c-839a-83d22af0074a" />
         <script
           dangerouslySetInnerHTML={{

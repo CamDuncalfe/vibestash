@@ -113,6 +113,18 @@ export default async function Page({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "VibeStash",
+            description: "Discover the best vibe-coded apps and products",
+            url: "https://vibestash.fun",
+          }),
+        }}
+      />
       {potdProduct && <ProductOfTheDay product={potdProduct} />}
       <CollectionsRow />
       <HomeContent

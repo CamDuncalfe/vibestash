@@ -87,7 +87,32 @@ export default async function ProductDetailPage({ params }: PageProps) {
     ...p.screenshots.filter((s) => s !== p.thumbnail_url),
   ];
 
+  const jsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: p.title,
+    url: p.url,
+    applicationCategory: p.categories[0] || "WebApplication",
+  };
+  if (p.description) jsonLd.description = p.description;
+  if (p.thumbnail_url) jsonLd.image = p.thumbnail_url;
+  if (p.released_at) jsonLd.datePublished = p.released_at;
+  if (p.maker_name) {
+    const author: Record<string, string> = { "@type": "Person", name: p.maker_name };
+    if (p.maker_twitter) {
+      author.url = `https://x.com/${p.maker_twitter.replace("@", "")}`;
+    } else if (p.maker_url) {
+      author.url = p.maker_url;
+    }
+    jsonLd.author = author;
+  }
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto px-6 py-10">
         <Link
@@ -289,5 +314,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
         )}
       </div>
     </div>
+    </>
   );
 }
