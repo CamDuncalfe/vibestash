@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Product } from '@/types';
@@ -7,24 +8,49 @@ import { LikeButton } from './LikeButton';
 import { UpvoteButton } from './UpvoteButton';
 
 export function ProductCard({ product, showFeaturedBadge }: { product: Product; showFeaturedBadge?: boolean }) {
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
     <Link href={`/products/${product.slug}`} className="group block">
       <div className="bg-white rounded-lg border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
-        <div className="aspect-[16/10] bg-gray-100 relative overflow-hidden">
+        <div 
+          className="aspect-[16/10] bg-gray-100 relative overflow-hidden"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
           {showFeaturedBadge && product.featured && (
             <span className="absolute top-2 left-2 z-10 text-[11px] font-semibold px-2 py-0.5 bg-amber-400 text-amber-900 rounded-full shadow-sm">
               Staff Pick
             </span>
           )}
-          {product.thumbnail_url ? (
+          
+          {/* Thumbnail Image */}
+          {product.thumbnail_url && (
             <Image
               src={product.thumbnail_url}
               alt={product.title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className={`object-cover transition-all duration-300 ${
+                isHovering && product.video_url ? 'opacity-0' : 'opacity-100 group-hover:scale-105'
+              }`}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
-          ) : (
+          )}
+
+          {/* Video on Hover */}
+          {product.video_url && isHovering && (
+            <video
+              src={product.video_url}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+
+          {/* Fallback Placeholder */}
+          {!product.thumbnail_url && !product.video_url && (
             <div className="absolute inset-0 flex items-center justify-center text-gray-300">
               <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -42,6 +68,28 @@ export function ProductCard({ product, showFeaturedBadge }: { product: Product; 
               <LikeButton productId={product.id} initialCount={product.likes_count} />
             </div>
           </div>
+          {product.maker_name && product.maker_twitter && (
+            <div className="flex items-center gap-1.5 mt-2">
+              {product.maker_avatar_url && (
+                <Image
+                  src={product.maker_avatar_url}
+                  alt={product.maker_name}
+                  width={16}
+                  height={16}
+                  className="rounded-full"
+                />
+              )}
+              <a
+                href={`https://x.com/${product.maker_twitter.replace('@', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] text-gray-500 hover:text-gray-700 transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {product.maker_twitter.startsWith('@') ? product.maker_twitter : `@${product.maker_twitter}`}
+              </a>
+            </div>
+          )}
           {product.tools_used.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-2.5">
               {product.tools_used.slice(0, 4).map((tool) => (
@@ -70,25 +118,6 @@ export function ProductCard({ product, showFeaturedBadge }: { product: Product; 
                 </span>
               ))}
             </div>
-          )}
-          {(product.maker_name || product.maker_twitter) && (
-            <p className="text-xs text-gray-400 mt-2.5">
-              by {product.maker_name || 'Unknown'}
-              {product.maker_twitter && (
-                <>
-                  {' '}·{' '}
-                  <a
-                    href={`https://x.com/${product.maker_twitter.replace('@', '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#FF6B35] hover:underline"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {product.maker_twitter}
-                  </a>
-                </>
-              )}
-            </p>
           )}
         </div>
       </div>
