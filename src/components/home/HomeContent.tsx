@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useTransition } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Product, Category } from '@/types';
 import { ProductGrid } from '@/components/products/ProductGrid';
 import { Pagination } from '@/components/products/Pagination';
@@ -105,9 +105,10 @@ export function HomeContent({
   const [totalPages, setTotalPages] = useState(Math.ceil(initialTotal / PRODUCTS_PER_PAGE));
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [isLoading, setIsLoading] = useState(false);
-  const [, startTransition] = useTransition();
+  const fetchRef = useRef(0);
 
   const fetchProducts = useCallback(async (categorySlug?: string, page = 1) => {
+    const id = ++fetchRef.current;
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -122,28 +123,37 @@ export function HomeContent({
       const res = await fetch(`/api/products?${params.toString()}`);
       const data = await res.json();
 
-      setProducts(data.products || []);
-      setTotalPages(Math.ceil((data.total || 0) / PRODUCTS_PER_PAGE));
+      // Only apply if this is still the latest request
+      if (id === fetchRef.current) {
+        setProducts(data.products || []);
+        setTotalPages(Math.ceil((data.total || 0) / PRODUCTS_PER_PAGE));
+      }
     } catch {
       // keep existing products on error
     } finally {
-      setIsLoading(false);
+      if (id === fetchRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [categories]);
+
+  // Update URL without triggering Next.js App Router navigation
+  const updateUrl = useCallback((params: URLSearchParams) => {
+    const url = params.toString() ? `/?${params.toString()}` : '/';
+    // Use replaceState to avoid Next.js pushState interception
+    const state = { __vibestash: true };
+    window.history.replaceState(state, '', url);
+  }, []);
 
   const handleFilterSelect = (slug?: string) => {
     setActiveSlug(slug);
     setCurrentPage(1);
 
-    // Update URL without navigation
     const params = new URLSearchParams();
     if (slug) params.set('category', slug);
-    const url = params.toString() ? `/?${params.toString()}` : '/';
-    window.history.replaceState(null, '', url);
+    updateUrl(params);
 
-    startTransition(() => {
-      fetchProducts(slug, 1);
-    });
+    fetchProducts(slug, 1);
   };
 
   const handlePageChange = useCallback((page: number) => {
@@ -152,15 +162,23 @@ export function HomeContent({
     const params = new URLSearchParams();
     if (activeSlug) params.set('category', activeSlug);
     if (page > 1) params.set('page', page.toString());
-    const url = params.toString() ? `/?${params.toString()}` : '/';
-    window.history.pushState(null, '', url);
+    updateUrl(params);
 
-    startTransition(() => {
-      fetchProducts(activeSlug, page);
-    });
-  }, [activeSlug, fetchProducts, startTransition]);
+    // Scroll to top of product grid
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Handle pagination from URL (back/forward)
+    fetchProducts(activeSlug, page);
+  }, [activeSlug, fetchProducts, updateUrl]);
+
+  // Sync with initialProducts when server re-renders (e.g. direct navigation)
+  useEffect(() => {
+    setProducts(initialProducts);
+    setTotalPages(Math.ceil(initialTotal / PRODUCTS_PER_PAGE));
+    setCurrentPage(initialPage);
+    setActiveSlug(initialCategory);
+  }, [initialProducts, initialTotal, initialPage, initialCategory]);
+
+  // Handle browser back/forward
   useEffect(() => {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
