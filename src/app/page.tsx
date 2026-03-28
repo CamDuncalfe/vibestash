@@ -1,8 +1,21 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Product, Category } from '@/types';
 import { HomeContent } from '@/components/home/HomeContent';
+import { ProductOfTheDay } from '@/components/home/ProductOfTheDay';
+import { CollectionsRow } from '@/components/home/CollectionsRow';
 
 const PRODUCTS_PER_PAGE = 12;
+
+// Deterministic date-based hash for Product of the Day
+function dateHash(dateStr: string): number {
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    const char = dateStr.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
+}
 
 export default async function Page({
   searchParams,
@@ -78,15 +91,39 @@ export default async function Page({
 
   const { data: products, count } = await query;
 
+  // Product of the Day: deterministic daily pick
+  let potdProduct: Product | null = null;
+  const { data: approvedIds } = await supabase
+    .from('products')
+    .select('id')
+    .eq('approved', true)
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false');
+
+  if (approvedIds && approvedIds.length > 0) {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const index = dateHash(today) % approvedIds.length;
+    const pickedId = approvedIds[index].id;
+    const { data: potd } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', pickedId)
+      .single();
+    if (potd) potdProduct = potd as Product;
+  }
+
   return (
-    <HomeContent
-      initialProducts={(products as Product[]) || []}
-      initialTotal={count || 0}
-      categories={(categories as Category[]) || []}
-      productCounts={productCounts}
-      initialCategory={activeCategory}
-      initialPage={currentPage}
-      initialSort={sort}
-    />
+    <>
+      {potdProduct && <ProductOfTheDay product={potdProduct} />}
+      <CollectionsRow />
+      <HomeContent
+        initialProducts={(products as Product[]) || []}
+        initialTotal={count || 0}
+        categories={(categories as Category[]) || []}
+        productCounts={productCounts}
+        initialCategory={activeCategory}
+        initialPage={currentPage}
+        initialSort={sort}
+      />
+    </>
   );
 }

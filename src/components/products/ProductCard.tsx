@@ -51,6 +51,7 @@ function XEngagementBar({ product }: { product: Product }) {
 
 export function ProductCard({ product }: { product: Product; showFeaturedBadge?: boolean }) {
   const [isHovering, setIsHovering] = useState(false);
+  const isNew = Date.now() - new Date(product.created_at).getTime() < 48 * 60 * 60 * 1000;
 
   return (
     <div className="group relative flex cursor-pointer flex-col gap-2">
@@ -64,6 +65,11 @@ export function ProductCard({ product }: { product: Product; showFeaturedBadge?:
           onMouseLeave={() => setIsHovering(false)}
         >
           <div className="border-preview">
+            {isNew && (
+              <span className="absolute top-2 left-2 z-10 bg-green-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                NEW
+              </span>
+            )}
             {product.thumbnail_url ? (
               <Image
                 src={product.thumbnail_url}
