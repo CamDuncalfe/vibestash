@@ -30,6 +30,23 @@ export default function AuthPage() {
     }
   }
 
+  async function handleTwitterSignIn() {
+    setLoading(true);
+    setMessage(null);
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'twitter',
+      options: {
+        redirectTo: window.location.origin + '/auth/callback',
+      },
+    });
+
+    if (error) {
+      setMessage({ type: 'error', text: error.message });
+      setLoading(false);
+    }
+  }
+
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -78,6 +95,17 @@ export default function AuthPage() {
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
             </svg>
             Continue with Google
+          </button>
+
+          <button
+            onClick={handleTwitterSignIn}
+            disabled={loading}
+            className="mt-3 w-full flex items-center justify-center gap-3 rounded-lg bg-black dark:bg-white px-4 py-2.5 text-sm font-medium text-white dark:text-black hover:bg-mbogray-800 dark:hover:bg-mbogray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            Continue with X
           </button>
 
           <div className="my-6 flex items-center gap-3">

@@ -60,7 +60,27 @@ export function Header() {
           {loading ? (
             <div className="w-16 h-8 bg-mbogray-100 dark:bg-mbogray-800 rounded-full animate-pulse" />
           ) : user ? (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
+              {(() => {
+                const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+                const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email;
+                const initial = (displayName || '?').charAt(0).toUpperCase();
+                return avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={displayName || 'User avatar'}
+                    title={displayName || undefined}
+                    className="h-7 w-7 rounded-full object-cover"
+                  />
+                ) : (
+                  <div
+                    title={displayName || undefined}
+                    className="h-7 w-7 rounded-full bg-accent text-white flex items-center justify-center text-xs font-medium"
+                  >
+                    {initial}
+                  </div>
+                );
+              })()}
               <Link
                 href="/admin"
                 className="px-3 py-2 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors"
