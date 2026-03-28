@@ -38,8 +38,14 @@ export async function GET(request: NextRequest) {
     case 'liked':
       query = query.order('like_count', { ascending: false })
       break
+    case 'new':
     case 'newest':
       query = query.order('created_at', { ascending: false })
+      break
+    case 'rising':
+      query = query
+        .order('upvotes_count', { ascending: false })
+        .order('created_at', { ascending: false })
       break
     default:
       query = query.order('created_at', { ascending: false })

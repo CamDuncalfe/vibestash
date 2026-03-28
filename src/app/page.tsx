@@ -12,6 +12,7 @@ export default async function Page({
   const params = await searchParams;
   const activeCategory = params.category;
   const currentPage = Math.max(1, parseInt(params.page || '1', 10));
+  const sort = (params.sort as 'trending' | 'new' | 'rising') || 'trending';
 
   const supabase = await createClient();
 
@@ -45,17 +46,27 @@ export default async function Page({
     if (match) activeCategoryName = match.name;
   }
 
-  // Trending sort: featured first, then by engagement, then recency
   let query = supabase
     .from('products')
     .select('*', { count: 'exact' })
     .eq('approved', true)
-    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
-    .order('featured', { ascending: false })
-    .order('released_at', { ascending: false, nullsFirst: false })
-    .order('upvotes_count', { ascending: false })
-    .order('likes_count', { ascending: false })
-    .order('created_at', { ascending: false });
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false');
+
+  if (sort === 'new') {
+    query = query.order('created_at', { ascending: false });
+  } else if (sort === 'rising') {
+    query = query
+      .order('upvotes_count', { ascending: false })
+      .order('created_at', { ascending: false });
+  } else {
+    // trending (default): featured first, then by engagement, then recency
+    query = query
+      .order('featured', { ascending: false })
+      .order('released_at', { ascending: false, nullsFirst: false })
+      .order('upvotes_count', { ascending: false })
+      .order('likes_count', { ascending: false })
+      .order('created_at', { ascending: false });
+  }
 
   if (activeCategoryName) {
     query = query.contains('categories', [activeCategoryName]);
@@ -75,6 +86,7 @@ export default async function Page({
       productCounts={productCounts}
       initialCategory={activeCategory}
       initialPage={currentPage}
+      initialSort={sort}
     />
   );
 }

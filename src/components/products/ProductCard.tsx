@@ -6,6 +6,7 @@ import Image from 'next/image';
 import type { Product } from '@/types';
 import { LikeButton } from './LikeButton';
 import { UpvoteButton } from './UpvoteButton';
+import { timeAgo } from '@/lib/timeago';
 
 function formatCount(n: number) {
   if (n >= 1000000) return `${(n / 1000000).toFixed(1).replace(/\.0$/, '')}M`;
@@ -181,6 +182,14 @@ export function ProductCard({ product }: { product: Product; showFeaturedBadge?:
                 {product.tools_used.slice(0, 3).join(', ')}
                 {product.tools_used.length > 3 && `, +${product.tools_used.length - 3}`}
               </span>
+            )}
+            {product.created_at && (
+              <>
+                <span className="text-mbogray-300 dark:text-mbogray-600 text-[12px]">·</span>
+                <span className="text-mbogray-400 dark:text-mbogray-500 text-[11px] shrink-0">
+                  {timeAgo(product.created_at)}
+                </span>
+              </>
             )}
           </div>
           <XEngagementBar product={product} />

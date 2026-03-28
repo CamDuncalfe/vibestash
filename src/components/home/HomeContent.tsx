@@ -8,6 +8,44 @@ import { NewsletterCTA } from './NewsletterCTA';
 
 const PRODUCTS_PER_PAGE = 12;
 
+type SortMode = 'trending' | 'new' | 'rising';
+
+const SORT_TABS: { value: SortMode; label: string }[] = [
+  { value: 'trending', label: 'Trending' },
+  { value: 'new', label: 'New' },
+  { value: 'rising', label: 'Rising' },
+];
+
+function SortTabs({
+  active,
+  onSelect,
+}: {
+  active: SortMode;
+  onSelect: (sort: SortMode) => void;
+}) {
+  return (
+    <div className="flex items-center gap-1.5">
+      {SORT_TABS.map((tab) => {
+        const isActive = active === tab.value;
+        return (
+          <button
+            key={tab.value}
+            onClick={() => onSelect(tab.value)}
+            className={`inline-flex flex-none select-none items-center justify-center rounded-xl px-4 py-1 text-sm font-semibold leading-7 border transition-colors ${
+              isActive
+                ? 'border-mbogray-900 dark:border-white bg-mbogray-900 dark:bg-white text-white dark:text-mbogray-900'
+                : 'border-mbogray-200 dark:border-mbogray-700 text-mbogray-600 dark:text-mbogray-300 hover:bg-mbogray-100 dark:hover:bg-mbogray-700'
+            }`}
+          >
+            {tab.value === 'trending' && <span className="text-accent mr-1.5">&#9679;</span>}
+            {tab.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function CategoryFilter({
   categories,
   activeSlug,
@@ -39,8 +77,7 @@ function CategoryFilter({
               : 'border-mbogray-200 dark:border-mbogray-700 text-mbogray-900 dark:text-mbogray-200 bg-mbogray-50 dark:bg-mbogray-800 hover:bg-mbogray-100 dark:hover:bg-mbogray-700'
           }`}
         >
-          <span className="text-accent mr-1.5">&#9679;</span>
-          Trending
+          All
         </button>
 
         {categories.filter((cat) => (productCounts[cat.slug] || 0) > 0).map((cat) => {
@@ -93,6 +130,7 @@ export function HomeContent({
   productCounts,
   initialCategory,
   initialPage,
+  initialSort,
 }: {
   initialProducts: Product[];
   initialTotal: number;
@@ -100,14 +138,16 @@ export function HomeContent({
   productCounts: Record<string, number>;
   initialCategory?: string;
   initialPage: number;
+  initialSort?: SortMode;
 }) {
   const [activeSlug, setActiveSlug] = useState(initialCategory);
+  const [sortMode, setSortMode] = useState<SortMode>(initialSort || 'trending');
   const [products, setProducts] = useState(initialProducts);
   const [totalPages, setTotalPages] = useState(Math.ceil(initialTotal / PRODUCTS_PER_PAGE));
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchProducts = useCallback(async (categorySlug?: string, page = 1) => {
+  const fetchProducts = useCallback(async (categorySlug?: string, page = 1, sort: SortMode = 'trending') => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -117,7 +157,7 @@ export function HomeContent({
       }
       params.set('page', page.toString());
       params.set('limit', PRODUCTS_PER_PAGE.toString());
-      params.set('sort', 'trending');
+      params.set('sort', sort);
 
       const res = await fetch(`/api/products?${params.toString()}`);
       const data = await res.json();
@@ -131,17 +171,26 @@ export function HomeContent({
     }
   }, [categories]);
 
+  const updateUrl = (slug?: string, sort?: SortMode) => {
+    const params = new URLSearchParams();
+    if (slug) params.set('category', slug);
+    if (sort && sort !== 'trending') params.set('sort', sort);
+    const url = params.toString() ? `/?${params.toString()}` : '/';
+    window.history.replaceState(null, '', url);
+  };
+
   const handleFilterSelect = (slug?: string) => {
     setActiveSlug(slug);
     setCurrentPage(1);
+    updateUrl(slug, sortMode);
+    fetchProducts(slug, 1, sortMode);
+  };
 
-    // Update URL for category filter (replaceState to avoid adding history)
-    const params = new URLSearchParams();
-    if (slug) params.set('category', slug);
-    const url = params.toString() ? `/?${params.toString()}` : '/';
-    window.history.replaceState(null, '', url);
-
-    fetchProducts(slug, 1);
+  const handleSortSelect = (sort: SortMode) => {
+    setSortMode(sort);
+    setCurrentPage(1);
+    updateUrl(activeSlug, sort);
+    fetchProducts(activeSlug, 1, sort);
   };
 
   // Sync state when server re-renders with new props (pagination via Link navigation)
@@ -150,12 +199,14 @@ export function HomeContent({
     setTotalPages(Math.ceil(initialTotal / PRODUCTS_PER_PAGE));
     setCurrentPage(initialPage);
     setActiveSlug(initialCategory);
-  }, [initialProducts, initialTotal, initialPage, initialCategory]);
+    setSortMode(initialSort || 'trending');
+  }, [initialProducts, initialTotal, initialPage, initialCategory, initialSort]);
 
   return (
     <div className="relative min-h-screen">
       <div className="px-4 md:px-6">
-        <section className="py-6">
+        <section className="py-6 flex flex-col gap-3">
+          <SortTabs active={sortMode} onSelect={handleSortSelect} />
           <CategoryFilter
             categories={categories}
             activeSlug={activeSlug}
