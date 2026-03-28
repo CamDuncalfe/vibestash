@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Product, Category } from '@/types';
 import { ProductGrid } from '@/components/products/ProductGrid';
 import { Pagination } from '@/components/products/Pagination';
@@ -105,10 +105,8 @@ export function HomeContent({
   const [totalPages, setTotalPages] = useState(Math.ceil(initialTotal / PRODUCTS_PER_PAGE));
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [isLoading, setIsLoading] = useState(false);
-  const fetchRef = useRef(0);
 
   const fetchProducts = useCallback(async (categorySlug?: string, page = 1) => {
-    const id = ++fetchRef.current;
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -123,75 +121,35 @@ export function HomeContent({
       const res = await fetch(`/api/products?${params.toString()}`);
       const data = await res.json();
 
-      // Only apply if this is still the latest request
-      if (id === fetchRef.current) {
-        setProducts(data.products || []);
-        setTotalPages(Math.ceil((data.total || 0) / PRODUCTS_PER_PAGE));
-      }
+      setProducts(data.products || []);
+      setTotalPages(Math.ceil((data.total || 0) / PRODUCTS_PER_PAGE));
     } catch {
       // keep existing products on error
     } finally {
-      if (id === fetchRef.current) {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }
   }, [categories]);
-
-  // Update URL without triggering Next.js App Router navigation
-  const updateUrl = useCallback((params: URLSearchParams) => {
-    const url = params.toString() ? `/?${params.toString()}` : '/';
-    // Use replaceState to avoid Next.js pushState interception
-    const state = { __vibestash: true };
-    window.history.replaceState(state, '', url);
-  }, []);
 
   const handleFilterSelect = (slug?: string) => {
     setActiveSlug(slug);
     setCurrentPage(1);
 
+    // Update URL for category filter (replaceState to avoid adding history)
     const params = new URLSearchParams();
     if (slug) params.set('category', slug);
-    updateUrl(params);
+    const url = params.toString() ? `/?${params.toString()}` : '/';
+    window.history.replaceState(null, '', url);
 
     fetchProducts(slug, 1);
   };
 
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-
-    const params = new URLSearchParams();
-    if (activeSlug) params.set('category', activeSlug);
-    if (page > 1) params.set('page', page.toString());
-    updateUrl(params);
-
-    // Scroll to top of product grid
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    fetchProducts(activeSlug, page);
-  }, [activeSlug, fetchProducts, updateUrl]);
-
-  // Sync with initialProducts when server re-renders (e.g. direct navigation)
+  // Sync state when server re-renders with new props (pagination via Link navigation)
   useEffect(() => {
     setProducts(initialProducts);
     setTotalPages(Math.ceil(initialTotal / PRODUCTS_PER_PAGE));
     setCurrentPage(initialPage);
     setActiveSlug(initialCategory);
   }, [initialProducts, initialTotal, initialPage, initialCategory]);
-
-  // Handle browser back/forward
-  useEffect(() => {
-    const handlePopState = () => {
-      const params = new URLSearchParams(window.location.search);
-      const cat = params.get('category') || undefined;
-      const page = Math.max(1, parseInt(params.get('page') || '1', 10));
-      setActiveSlug(cat);
-      setCurrentPage(page);
-      fetchProducts(cat, page);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, [fetchProducts]);
 
   return (
     <div className="relative min-h-screen">
@@ -211,7 +169,7 @@ export function HomeContent({
 
         {totalPages > 1 && (
           <div className="mt-12 mb-12">
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
           </div>
         )}
       </div>
