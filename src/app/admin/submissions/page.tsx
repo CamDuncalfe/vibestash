@@ -23,10 +23,24 @@ export default function AdminSubmissions() {
   }, [supabase]);
 
   const handleUpdateStatus = async (id: string, status: 'approved' | 'rejected') => {
-    await supabase
-      .from('submissions')
-      .update({ status, reviewed_at: new Date().toISOString() })
-      .eq('id', id);
+    if (status === 'approved') {
+      // Use the approve API to create a product from the submission
+      const res = await fetch('/api/submissions/approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ submissionId: id }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        alert(`Failed to approve: ${err.error}`);
+        return;
+      }
+    } else {
+      await supabase
+        .from('submissions')
+        .update({ status, reviewed_at: new Date().toISOString() })
+        .eq('id', id);
+    }
     fetchSubmissions();
   };
 
