@@ -30,6 +30,7 @@ export default async function PopularPage({
     .from('products')
     .select('*', { count: 'exact' })
     .eq('approved', true)
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
     .order('likes_count', { ascending: false })
     .order('views_count', { ascending: false })
     .range(from, to);

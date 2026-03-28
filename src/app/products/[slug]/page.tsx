@@ -64,6 +64,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       .from('products')
       .select('*')
       .eq('approved', true)
+      .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
       .neq('id', p.id)
       .overlaps('categories', p.categories)
       .limit(3);

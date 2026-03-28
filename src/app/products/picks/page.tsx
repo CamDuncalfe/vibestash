@@ -30,6 +30,7 @@ export default async function PicksPage({
     .from('products')
     .select('*', { count: 'exact' })
     .eq('approved', true)
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
     .eq('featured', true)
     .order('likes_count', { ascending: false })
     .order('created_at', { ascending: false })

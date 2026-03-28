@@ -30,6 +30,8 @@ export interface Product {
   released_at: string | null;
   created_at: string;
   updated_at: string;
+  flagged_for_removal: boolean;
+  flag_reason: string | null;
 }
 
 export interface Category {

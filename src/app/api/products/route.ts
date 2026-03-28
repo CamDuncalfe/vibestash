@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
     .from('products')
     .select('*', { count: 'exact' })
     .eq('approved', true)
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
 
   if (category) {
     query = query.contains('categories', [category])

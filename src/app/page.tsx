@@ -24,7 +24,8 @@ export default async function Page({
   const { data: allProducts } = await supabase
     .from('products')
     .select('categories')
-    .eq('approved', true);
+    .eq('approved', true)
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false');
 
   const productCounts: Record<string, number> = {};
   if (allProducts && categories) {
@@ -49,6 +50,7 @@ export default async function Page({
     .from('products')
     .select('*', { count: 'exact' })
     .eq('approved', true)
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
     .order('featured', { ascending: false })
     .order('released_at', { ascending: false, nullsFirst: false })
     .order('upvotes_count', { ascending: false })

@@ -24,6 +24,7 @@ export default async function ToolsPage() {
     .from('products')
     .select('tools_used, title, slug, thumbnail_url, likes_count')
     .eq('approved', true)
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
     .order('likes_count', { ascending: false });
 
   const toolMap = new Map<

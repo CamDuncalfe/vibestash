@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
@@ -11,6 +12,17 @@ export function Header() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const supabase = createClient();
+  const [flaggedCount, setFlaggedCount] = useState(0);
+
+  useEffect(() => {
+    supabase
+      .from('products')
+      .select('id', { count: 'exact', head: true })
+      .eq('flagged_for_removal', true)
+      .then(({ count }) => {
+        if (count && count > 0) setFlaggedCount(count);
+      });
+  }, []);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -50,6 +62,17 @@ export function Header() {
             >
               Sponsor
             </Link>
+            {flaggedCount > 0 && (
+              <Link
+                href="/review"
+                className="px-3 py-5 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1"
+              >
+                Review
+                <span className="text-[10px] font-semibold bg-red-500 text-white rounded-full px-1.5 py-0.5 leading-none">
+                  {flaggedCount}
+                </span>
+              </Link>
+            )}
           </nav>
         </div>
 
