@@ -13,6 +13,7 @@ export function Header() {
   const router = useRouter();
   const supabase = createClient();
   const [flaggedCount, setFlaggedCount] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     supabase
@@ -23,6 +24,18 @@ export function Header() {
         if (count && count > 0) setFlaggedCount(count);
       });
   }, []);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); return; }
+    supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        setIsAdmin(data?.is_admin === true);
+      });
+  }, [user, supabase]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -62,7 +75,7 @@ export function Header() {
             >
               Sponsor
             </Link>
-            {flaggedCount > 0 && (
+            {isAdmin && flaggedCount > 0 && (
               <Link
                 href="/review"
                 className="px-3 py-5 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1"

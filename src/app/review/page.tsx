@@ -3,16 +3,54 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { createClient } from '@/lib/supabase/client';
 import type { Product } from '@/types';
 
 export default function ReviewPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const supabase = createClient();
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    fetchFlaggedProducts();
-  }, []);
+    if (authLoading) return;
+    if (!user) { router.push('/auth'); return; }
+    supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        const admin = data?.is_admin === true;
+        setIsAdmin(admin);
+        if (admin) fetchFlaggedProducts();
+      });
+  }, [user, authLoading]);
+
+  if (authLoading || isAdmin === null) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <p className="text-mbogray-400 dark:text-mbogray-500 text-sm">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-mbogray-900 dark:text-white mb-2">Access denied</h1>
+          <p className="text-mbogray-500 dark:text-mbogray-400 text-sm">You do not have permission to view this page.</p>
+          <Link href="/" className="text-sm text-accent hover:underline mt-4 inline-block">Go back home</Link>
+        </div>
+      </div>
+    );
+  }
 
   async function fetchFlaggedProducts() {
     setLoading(true);
