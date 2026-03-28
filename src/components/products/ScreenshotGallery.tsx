@@ -17,7 +17,7 @@ export function ScreenshotGallery({
   return (
     <div>
       {/* Main Image */}
-      <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-gray-100">
+      <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-mbogray-100 dark:bg-mbogray-800">
         <Image
           src={screenshots[selectedIndex]}
           alt={`${title} screenshot ${selectedIndex + 1}`}
@@ -37,8 +37,8 @@ export function ScreenshotGallery({
               onClick={() => setSelectedIndex(i)}
               className={`relative w-20 h-14 rounded-lg overflow-hidden shrink-0 border-2 transition-colors ${
                 i === selectedIndex
-                  ? 'border-[#FF6B35]'
-                  : 'border-transparent hover:border-gray-300'
+                  ? 'border-accent'
+                  : 'border-transparent hover:border-mbogray-300 dark:hover:border-mbogray-600'
               }`}
             >
               <Image

@@ -74,7 +74,7 @@ export default function SubmitPage() {
   if (authLoading) {
     return (
       <main className="min-h-[calc(100vh-160px)] flex items-center justify-center">
-        <p className="text-gray-400 text-sm">Loading...</p>
+        <p className="text-mbogray-400 dark:text-mbogray-500 text-sm">Loading...</p>
       </main>
     );
   }
@@ -87,14 +87,14 @@ export default function SubmitPage() {
     return (
       <main className="min-h-[calc(100vh-160px)] flex items-center justify-center px-4">
         <div className="w-full max-w-lg text-center">
-          <div className="bg-white border border-gray-200 rounded-lg p-10">
-            <h1 className="text-2xl font-bold text-[#1a1a1a]">Thank you!</h1>
-            <p className="mt-3 text-gray-500">
+          <div className="bg-white dark:bg-mbogray-800 border border-mbogray-200 dark:border-mbogray-700 rounded-lg p-10">
+            <h1 className="text-2xl font-bold text-mbogray-900 dark:text-white">Thank you!</h1>
+            <p className="mt-3 text-mbogray-500 dark:text-mbogray-400">
               Your submission has been received and will be reviewed shortly.
             </p>
             <button
               onClick={() => router.push('/')}
-              className="mt-6 inline-flex rounded-lg bg-[#FF6B35] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#e55a2a] transition-colors"
+              className="mt-6 inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
             >
               Back to home
             </button>
@@ -104,54 +104,35 @@ export default function SubmitPage() {
     );
   }
 
+  const inputClass = "mt-1.5 w-full rounded-lg border border-mbogray-200 dark:border-mbogray-700 bg-white dark:bg-mbogray-800 px-3 py-2 text-sm text-mbogray-800 dark:text-mbogray-200 placeholder:text-mbogray-400 dark:placeholder:text-mbogray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent";
+
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
-      <div className="bg-white border border-gray-200 rounded-lg p-8">
-        <h1 className="text-2xl font-bold text-[#1a1a1a]">
+      <div className="bg-white dark:bg-mbogray-800 border border-mbogray-200 dark:border-mbogray-700 rounded-lg p-8">
+        <h1 className="text-2xl font-bold text-mbogray-900 dark:text-white">
           Submit a product
         </h1>
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-mbogray-500 dark:text-mbogray-400">
           Share a vibe-coded product with the community
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div>
-            <label
-              htmlFor="productUrl"
-              className="block text-sm font-medium text-[#1a1a1a]"
-            >
+            <label htmlFor="productUrl" className="block text-sm font-medium text-mbogray-800 dark:text-mbogray-200">
               Product URL <span className="text-red-500">*</span>
             </label>
-            <input
-              id="productUrl"
-              type="url"
-              value={productUrl}
-              onChange={(e) => setProductUrl(e.target.value)}
-              placeholder="https://example.com"
-              required
-              className="mt-1.5 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-[#1a1a1a] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
-            />
+            <input id="productUrl" type="url" value={productUrl} onChange={(e) => setProductUrl(e.target.value)} placeholder="https://example.com" required className={inputClass} />
           </div>
 
           <div>
-            <label
-              htmlFor="productName"
-              className="block text-sm font-medium text-[#1a1a1a]"
-            >
+            <label htmlFor="productName" className="block text-sm font-medium text-mbogray-800 dark:text-mbogray-200">
               Product name
             </label>
-            <input
-              id="productName"
-              type="text"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
-              placeholder="My Awesome App"
-              className="mt-1.5 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-[#1a1a1a] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
-            />
+            <input id="productName" type="text" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder="My Awesome App" className={inputClass} />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#1a1a1a]">
+            <label className="block text-sm font-medium text-mbogray-800 dark:text-mbogray-200">
               Tools used
             </label>
             <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -160,16 +141,11 @@ export default function SubmitPage() {
                   key={tool.id}
                   className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm cursor-pointer transition-colors ${
                     selectedTools.includes(tool.name)
-                      ? 'border-[#FF6B35] bg-orange-50 text-[#FF6B35]'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      ? 'border-accent bg-accent/10 text-accent'
+                      : 'border-mbogray-200 dark:border-mbogray-700 text-mbogray-600 dark:text-mbogray-400 hover:border-mbogray-300 dark:hover:border-mbogray-600'
                   }`}
                 >
-                  <input
-                    type="checkbox"
-                    checked={selectedTools.includes(tool.name)}
-                    onChange={() => toggleTool(tool.name)}
-                    className="sr-only"
-                  />
+                  <input type="checkbox" checked={selectedTools.includes(tool.name)} onChange={() => toggleTool(tool.name)} className="sr-only" />
                   {tool.name}
                 </label>
               ))}
@@ -177,58 +153,28 @@ export default function SubmitPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="makerName"
-              className="block text-sm font-medium text-[#1a1a1a]"
-            >
+            <label htmlFor="makerName" className="block text-sm font-medium text-mbogray-800 dark:text-mbogray-200">
               Maker name
             </label>
-            <input
-              id="makerName"
-              type="text"
-              value={makerName}
-              onChange={(e) => setMakerName(e.target.value)}
-              placeholder="Jane Doe"
-              className="mt-1.5 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-[#1a1a1a] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
-            />
+            <input id="makerName" type="text" value={makerName} onChange={(e) => setMakerName(e.target.value)} placeholder="Jane Doe" className={inputClass} />
           </div>
 
           <div>
-            <label
-              htmlFor="makerUrl"
-              className="block text-sm font-medium text-[#1a1a1a]"
-            >
+            <label htmlFor="makerUrl" className="block text-sm font-medium text-mbogray-800 dark:text-mbogray-200">
               Maker URL
             </label>
-            <input
-              id="makerUrl"
-              type="url"
-              value={makerUrl}
-              onChange={(e) => setMakerUrl(e.target.value)}
-              placeholder="https://twitter.com/janedoe"
-              className="mt-1.5 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-[#1a1a1a] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
-            />
+            <input id="makerUrl" type="url" value={makerUrl} onChange={(e) => setMakerUrl(e.target.value)} placeholder="https://twitter.com/janedoe" className={inputClass} />
           </div>
 
           <div>
-            <label
-              htmlFor="comments"
-              className="block text-sm font-medium text-[#1a1a1a]"
-            >
+            <label htmlFor="comments" className="block text-sm font-medium text-mbogray-800 dark:text-mbogray-200">
               Comments
             </label>
-            <textarea
-              id="comments"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              placeholder="Anything you'd like us to know about this product..."
-              rows={4}
-              className="mt-1.5 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-[#1a1a1a] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent resize-none"
-            />
+            <textarea id="comments" value={comments} onChange={(e) => setComments(e.target.value)} placeholder="Anything you'd like us to know about this product..." rows={4} className={`${inputClass} resize-none`} />
           </div>
 
           {error && (
-            <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="rounded-lg bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-400">
               {error}
             </div>
           )}
@@ -236,7 +182,7 @@ export default function SubmitPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-lg bg-[#FF6B35] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#e55a2a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? 'Submitting...' : 'Submit product'}
           </button>

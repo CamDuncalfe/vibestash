@@ -58,10 +58,10 @@ export default function SupportersPage() {
   return (
     <main className="max-w-5xl mx-auto px-4 py-12">
       <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold text-[#1a1a1a]">
+        <h1 className="text-3xl font-bold text-mbogray-900 dark:text-white">
           Support VibeStash
         </h1>
-        <p className="mt-2 text-gray-500">
+        <p className="mt-2 text-mbogray-500 dark:text-mbogray-400">
           Help us keep curating the best vibe-coded products
         </p>
       </div>
@@ -70,40 +70,36 @@ export default function SupportersPage() {
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className={`bg-white rounded-lg p-8 flex flex-col ${
+            className={`bg-white dark:bg-mbogray-800 rounded-lg p-8 flex flex-col ${
               tier.highlighted
-                ? 'border-2 border-[#FF6B35] shadow-sm'
-                : 'border border-gray-200'
+                ? 'border-2 border-accent shadow-sm'
+                : 'border border-mbogray-200 dark:border-mbogray-700'
             }`}
           >
-            <h2 className="text-lg font-semibold text-[#1a1a1a]">
+            <h2 className="text-lg font-semibold text-mbogray-900 dark:text-white">
               {tier.name}
             </h2>
             <div className="mt-3 flex items-baseline gap-1">
-              <span className="text-3xl font-bold text-[#1a1a1a]">
+              <span className="text-3xl font-bold text-mbogray-900 dark:text-white">
                 {tier.price}
               </span>
-              <span className="text-sm text-gray-400">{tier.period}</span>
+              <span className="text-sm text-mbogray-400 dark:text-mbogray-500">{tier.period}</span>
             </div>
 
             <ul className="mt-6 space-y-3 flex-1">
               {tier.features.map((feature) => (
                 <li
                   key={feature}
-                  className="flex items-start gap-2 text-sm text-gray-600"
+                  className="flex items-start gap-2 text-sm text-mbogray-600 dark:text-mbogray-400"
                 >
                   <svg
-                    className="h-4 w-4 mt-0.5 text-[#FF6B35] shrink-0"
+                    className="h-4 w-4 mt-0.5 text-accent shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                   {feature}
                 </li>
@@ -114,7 +110,7 @@ export default function SupportersPage() {
               {tier.disabled ? (
                 <button
                   disabled
-                  className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-400 cursor-not-allowed"
+                  className="w-full rounded-lg border border-mbogray-200 dark:border-mbogray-700 px-4 py-2.5 text-sm font-medium text-mbogray-400 dark:text-mbogray-500 cursor-not-allowed"
                 >
                   {tier.cta}
                 </button>
@@ -123,8 +119,8 @@ export default function SupportersPage() {
                   href={tier.href}
                   className={`block w-full text-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
                     tier.highlighted
-                      ? 'bg-[#FF6B35] text-white hover:bg-[#e55a2a]'
-                      : 'border border-gray-200 text-[#1a1a1a] hover:border-gray-300'
+                      ? 'bg-accent text-white hover:bg-accent-hover'
+                      : 'border border-mbogray-200 dark:border-mbogray-700 text-mbogray-800 dark:text-mbogray-200 hover:border-mbogray-300 dark:hover:border-mbogray-600'
                   }`}
                 >
                   {tier.cta}

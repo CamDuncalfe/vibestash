@@ -5,6 +5,7 @@ import { useAuth } from '@/components/auth/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { SearchBar } from './SearchBar';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export function Header() {
   const { user, loading } = useAuth();
@@ -17,57 +18,70 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="text-xl font-bold tracking-tight text-[#1a1a1a]">
-              VibeStash
+    <header className="relative z-20 bg-white dark:bg-[#0a0a0a] border-b border-mbogray-100 dark:border-mbogray-800">
+      <div className="mx-auto flex items-center justify-between px-4 md:px-6">
+        {/* Left: Logo + Nav links */}
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center shrink-0">
+            <span className="text-xl font-bold tracking-tight text-mbogray-900 dark:text-white">VibeStash</span>
+          </Link>
+          <nav className="hidden md:flex items-center ml-1">
+            <Link
+              href="/"
+              className="px-3 py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors"
+            >
+              Explore
             </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/" className="text-sm text-gray-600 hover:text-[#1a1a1a] transition-colors">
-                Explore
-              </Link>
-              <Link href="/tools" className="text-sm text-gray-600 hover:text-[#1a1a1a] transition-colors">
-                Tools
-              </Link>
-              <Link href="/submit" className="text-sm text-gray-600 hover:text-[#1a1a1a] transition-colors">
-                Submit
-              </Link>
-              <Link href="/supporters" className="text-sm text-gray-600 hover:text-[#1a1a1a] transition-colors">
-                Supporters
-              </Link>
-            </nav>
-          </div>
+            <Link
+              href="/tools"
+              className="px-3 py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors"
+            >
+              Tools
+            </Link>
+            <Link
+              href="/submit"
+              className="px-3 py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors"
+            >
+              Submit
+            </Link>
+            <Link
+              href="/supporters"
+              className="px-3 py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors"
+            >
+              Sponsor
+            </Link>
+          </nav>
+        </div>
 
-          <div className="flex items-center gap-4">
-            <SearchBar />
-            {loading ? (
-              <div className="w-20 h-9 bg-gray-100 rounded-lg animate-pulse" />
-            ) : user ? (
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/admin"
-                  className="text-sm text-gray-600 hover:text-[#1a1a1a] transition-colors"
-                >
-                  Admin
-                </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="text-sm text-gray-600 hover:text-[#1a1a1a] transition-colors"
-                >
-                  Sign out
-                </button>
-              </div>
-            ) : (
+        {/* Right: Search + Theme + Auth */}
+        <div className="flex items-center gap-2">
+          <SearchBar />
+          <ThemeToggle />
+          {loading ? (
+            <div className="w-16 h-8 bg-mbogray-100 dark:bg-mbogray-800 rounded-full animate-pulse" />
+          ) : user ? (
+            <div className="flex items-center gap-1">
               <Link
-                href="/auth"
-                className="text-sm font-medium bg-[#1a1a1a] text-white px-4 py-2 rounded-lg hover:bg-[#333] transition-colors"
+                href="/admin"
+                className="px-3 py-2 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors"
               >
-                Sign in
+                Admin
               </Link>
-            )}
-          </div>
+              <button
+                onClick={handleSignOut}
+                className="px-3 py-2 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/auth"
+              className="text-sm font-medium bg-mbogray-900 dark:bg-white text-white dark:text-mbogray-900 px-4 py-2 rounded-full hover:bg-mbogray-800 dark:hover:bg-mbogray-100 transition-colors"
+            >
+              Sign in
+            </Link>
+          )}
         </div>
       </div>
     </header>

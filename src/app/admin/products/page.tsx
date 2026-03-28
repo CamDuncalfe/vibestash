@@ -25,6 +25,14 @@ const emptyForm = {
   maker_name: '',
   maker_url: '',
   featured: false,
+  x_post_url: '',
+  x_likes: '',
+  x_reposts: '',
+  x_replies: '',
+  x_views: '',
+  released_at: '',
+  maker_twitter: '',
+  maker_avatar_url: '',
 };
 
 export default function AdminProducts() {
@@ -75,6 +83,14 @@ export default function AdminProducts() {
       maker_url: form.maker_url || null,
       featured: form.featured,
       approved: true,
+      x_post_url: form.x_post_url || null,
+      x_likes: parseInt(form.x_likes) || 0,
+      x_reposts: parseInt(form.x_reposts) || 0,
+      x_replies: parseInt(form.x_replies) || 0,
+      x_views: parseInt(form.x_views) || 0,
+      released_at: form.released_at || null,
+      maker_twitter: form.maker_twitter || null,
+      maker_avatar_url: form.maker_avatar_url || null,
     };
 
     if (editingId) {
@@ -104,6 +120,14 @@ export default function AdminProducts() {
       maker_name: product.maker_name ?? '',
       maker_url: product.maker_url ?? '',
       featured: product.featured,
+      x_post_url: product.x_post_url ?? '',
+      x_likes: product.x_likes ? product.x_likes.toString() : '',
+      x_reposts: product.x_reposts ? product.x_reposts.toString() : '',
+      x_replies: product.x_replies ? product.x_replies.toString() : '',
+      x_views: product.x_views ? product.x_views.toString() : '',
+      released_at: product.released_at ?? '',
+      maker_twitter: product.maker_twitter ?? '',
+      maker_avatar_url: product.maker_avatar_url ?? '',
     });
     setEditingId(product.id);
     setShowForm(true);
@@ -243,6 +267,80 @@ export default function AdminProducts() {
                 type="text"
                 value={form.maker_url}
                 onChange={(e) => setForm((f) => ({ ...f, maker_url: e.target.value }))}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Maker Twitter</label>
+              <input
+                type="text"
+                value={form.maker_twitter}
+                onChange={(e) => setForm((f) => ({ ...f, maker_twitter: e.target.value }))}
+                placeholder="@handle"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Maker Avatar URL</label>
+              <input
+                type="text"
+                value={form.maker_avatar_url}
+                onChange={(e) => setForm((f) => ({ ...f, maker_avatar_url: e.target.value }))}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Release Date</label>
+              <input
+                type="date"
+                value={form.released_at}
+                onChange={(e) => setForm((f) => ({ ...f, released_at: e.target.value }))}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-xs font-medium text-gray-500 mb-1">X Post URL</label>
+              <input
+                type="url"
+                value={form.x_post_url}
+                onChange={(e) => setForm((f) => ({ ...f, x_post_url: e.target.value }))}
+                placeholder="https://x.com/user/status/123"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">X Views</label>
+              <input
+                type="number"
+                value={form.x_views}
+                onChange={(e) => setForm((f) => ({ ...f, x_views: e.target.value }))}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">X Likes</label>
+              <input
+                type="number"
+                value={form.x_likes}
+                onChange={(e) => setForm((f) => ({ ...f, x_likes: e.target.value }))}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">X Reposts</label>
+              <input
+                type="number"
+                value={form.x_reposts}
+                onChange={(e) => setForm((f) => ({ ...f, x_reposts: e.target.value }))}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">X Replies</label>
+              <input
+                type="number"
+                value={form.x_replies}
+                onChange={(e) => setForm((f) => ({ ...f, x_replies: e.target.value }))}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 focus:border-[#FF6B35]"
               />
             </div>

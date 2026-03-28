@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-[#1a1a1a]">About VibeStash</h1>
+      <h1 className="text-3xl font-bold text-mbogray-900 dark:text-white">About VibeStash</h1>
 
-      <div className="mt-8 space-y-6 text-gray-600 leading-relaxed">
+      <div className="mt-8 space-y-6 text-mbogray-600 dark:text-mbogray-400 leading-relaxed">
         <p>
           Vibe coding is changing how software gets built. With AI-powered tools
           like Cursor, Bolt, Lovable, and v0, a new generation of makers is
@@ -45,7 +45,7 @@ export default function AboutPage() {
       <div className="mt-10">
         <Link
           href="/submit"
-          className="inline-flex rounded-lg bg-[#FF6B35] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#e55a2a] transition-colors"
+          className="inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
         >
           Submit a product
         </Link>

@@ -22,6 +22,12 @@ export interface Product {
   views_count: number;
   likes_count: number;
   upvotes_count: number;
+  x_post_url: string | null;
+  x_likes: number;
+  x_reposts: number;
+  x_replies: number;
+  x_views: number;
+  released_at: string | null;
   created_at: string;
   updated_at: string;
 }

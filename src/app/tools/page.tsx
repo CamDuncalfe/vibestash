@@ -26,7 +26,6 @@ export default async function ToolsPage() {
     .eq('approved', true)
     .order('likes_count', { ascending: false });
 
-  // Aggregate tools from all products' tools_used arrays
   const toolMap = new Map<
     string,
     { count: number; topProducts: Pick<Product, 'title' | 'slug' | 'thumbnail_url'>[] }
@@ -51,12 +50,12 @@ export default async function ToolsPage() {
     .sort((a, b) => b.count - a.count);
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen">
       <section className="pt-16 pb-12 px-6 text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold text-[#1a1a1a] tracking-tight max-w-3xl mx-auto leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-bold text-mbogray-900 dark:text-white tracking-tight max-w-3xl mx-auto leading-tight">
           Tools &amp; AI Assistants
         </h1>
-        <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
+        <p className="mt-4 text-lg text-mbogray-500 dark:text-mbogray-400 max-w-xl mx-auto">
           Explore the tools used to vibe-code amazing products
         </p>
       </section>
@@ -69,12 +68,12 @@ export default async function ToolsPage() {
               href={`/tools/${tool.slug}`}
               className="group block"
             >
-              <div className="bg-white rounded-lg border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1 p-5">
+              <div className="bg-white dark:bg-mbogray-800 rounded-lg border border-mbogray-100 dark:border-mbogray-700 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1 p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-[#1a1a1a] text-base">
+                  <h3 className="font-semibold text-mbogray-900 dark:text-white text-base">
                     {tool.name}
                   </h3>
-                  <span className="text-xs font-medium px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full">
+                  <span className="text-xs font-medium px-2.5 py-1 bg-mbogray-100 dark:bg-mbogray-700 text-mbogray-600 dark:text-mbogray-300 rounded-full">
                     {tool.count} {tool.count === 1 ? 'product' : 'products'}
                   </span>
                 </div>
@@ -83,7 +82,7 @@ export default async function ToolsPage() {
                     {tool.topProducts.map((p) => (
                       <div
                         key={p.slug}
-                        className="w-10 h-10 rounded-lg border-2 border-white overflow-hidden bg-gray-100 relative flex-shrink-0"
+                        className="w-10 h-10 rounded-lg border-2 border-white dark:border-mbogray-800 overflow-hidden bg-mbogray-100 dark:bg-mbogray-700 relative flex-shrink-0"
                       >
                         {p.thumbnail_url ? (
                           <Image
@@ -94,7 +93,7 @@ export default async function ToolsPage() {
                             sizes="40px"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs font-bold">
+                          <div className="w-full h-full flex items-center justify-center text-mbogray-300 dark:text-mbogray-500 text-xs font-bold">
                             {p.title.charAt(0)}
                           </div>
                         )}
@@ -109,7 +108,7 @@ export default async function ToolsPage() {
 
         {tools.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-400 text-sm">No tools found</p>
+            <p className="text-mbogray-400 dark:text-mbogray-500 text-sm">No tools found</p>
           </div>
         )}
 

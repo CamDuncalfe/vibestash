@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const category = searchParams.get('category')
-  const sort = searchParams.get('sort') || 'newest'
+  const sort = searchParams.get('sort') || 'trending'
   const page = parseInt(searchParams.get('page') || '1', 10)
   const limit = parseInt(searchParams.get('limit') || '12', 10)
 
@@ -23,6 +23,14 @@ export async function GET(request: NextRequest) {
   }
 
   switch (sort) {
+    case 'trending':
+      query = query
+        .order('featured', { ascending: false })
+        .order('released_at', { ascending: false, nullsFirst: false })
+        .order('upvotes_count', { ascending: false })
+        .order('likes_count', { ascending: false })
+        .order('created_at', { ascending: false })
+      break
     case 'popular':
       query = query.order('view_count', { ascending: false })
       break
@@ -30,6 +38,8 @@ export async function GET(request: NextRequest) {
       query = query.order('like_count', { ascending: false })
       break
     case 'newest':
+      query = query.order('created_at', { ascending: false })
+      break
     default:
       query = query.order('created_at', { ascending: false })
       break

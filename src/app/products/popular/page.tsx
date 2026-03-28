@@ -37,12 +37,12 @@ export default async function PopularPage({
   const totalPages = Math.ceil((count || 0) / PRODUCTS_PER_PAGE);
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen">
       <section className="pt-16 pb-12 px-6 text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold text-[#1a1a1a] tracking-tight max-w-3xl mx-auto leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-bold text-mbogray-900 dark:text-white tracking-tight max-w-3xl mx-auto leading-tight">
           Most Popular Vibe-Coded Apps
         </h1>
-        <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
+        <p className="mt-4 text-lg text-mbogray-500 dark:text-mbogray-400 max-w-xl mx-auto">
           The most liked and viewed products on VibeStash
         </p>
       </section>

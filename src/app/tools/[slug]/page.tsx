@@ -73,25 +73,25 @@ export default async function ToolDetailPage({ params, searchParams }: ToolDetai
   const totalPages = Math.ceil((count || 0) / PRODUCTS_PER_PAGE);
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen">
       <section className="pt-16 pb-12 px-6 text-center">
         <div className="mb-4">
           <Link
             href="/tools"
-            className="text-sm text-gray-400 hover:text-[#FF6B35] transition-colors"
+            className="text-sm text-mbogray-400 dark:text-mbogray-500 hover:text-accent transition-colors"
           >
             &larr; All Tools
           </Link>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold text-[#1a1a1a] tracking-tight max-w-3xl mx-auto leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-bold text-mbogray-900 dark:text-white tracking-tight max-w-3xl mx-auto leading-tight">
           {typedTool.name}
         </h1>
         {typedTool.description && (
-          <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
+          <p className="mt-4 text-lg text-mbogray-500 dark:text-mbogray-400 max-w-xl mx-auto">
             {typedTool.description}
           </p>
         )}
-        <p className="mt-2 text-sm text-gray-400">
+        <p className="mt-2 text-sm text-mbogray-400 dark:text-mbogray-500">
           {count || 0} {(count || 0) === 1 ? 'product' : 'products'} built with {typedTool.name}
         </p>
       </section>

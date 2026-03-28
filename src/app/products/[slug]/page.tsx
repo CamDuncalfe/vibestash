@@ -41,7 +41,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const supabase = await createClient();
 
-  // Fetch product
   const { data: product } = await supabase
     .from('products')
     .select('*')
@@ -53,14 +52,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   const p = product as Product;
 
-  // Increment view count (fire and forget)
   fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/api/views`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ productId: p.id }),
   }).catch(() => {});
 
-  // Fetch similar products (same categories, exclude current)
   let similarProducts: Product[] = [];
   if (p.categories.length > 0) {
     const { data } = await supabase
@@ -73,19 +70,17 @@ export default async function ProductDetailPage({ params }: PageProps) {
     if (data) similarProducts = data as Product[];
   }
 
-  // Build screenshot list: thumbnail first, then screenshots
   const allScreenshots = [
     ...(p.thumbnail_url ? [p.thumbnail_url] : []),
     ...p.screenshots.filter((s) => s !== p.thumbnail_url),
   ];
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen">
       <div className="max-w-4xl mx-auto px-6 py-10">
-        {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#1a1a1a] transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-mbogray-400 dark:text-mbogray-500 hover:text-mbogray-800 dark:hover:text-mbogray-200 transition-colors mb-8"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
@@ -93,21 +88,19 @@ export default async function ProductDetailPage({ params }: PageProps) {
           Back to all products
         </Link>
 
-        {/* Screenshot Gallery */}
         {allScreenshots.length > 0 && (
           <div className="mb-8">
             <ScreenshotGallery screenshots={allScreenshots} title={p.title} />
           </div>
         )}
 
-        {/* Title and visit button */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">{p.title}</h1>
+          <h1 className="text-3xl font-bold text-mbogray-900 dark:text-white">{p.title}</h1>
           <a
             href={p.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF6B35] text-white text-sm font-medium rounded-lg hover:bg-[#e55a2b] transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:bg-accent-hover transition-colors shrink-0"
           >
             Visit
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,17 +109,15 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </a>
         </div>
 
-        {/* Description */}
         {p.description && (
-          <p className="text-gray-600 leading-relaxed mb-8 whitespace-pre-line">
+          <p className="text-mbogray-600 dark:text-mbogray-400 leading-relaxed mb-8 whitespace-pre-line">
             {p.description}
           </p>
         )}
 
-        {/* Tools Used */}
         {p.tools_used.length > 0 && (
           <div className="mb-6">
-            <h2 className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide mb-2">
+            <h2 className="text-sm font-semibold text-mbogray-800 dark:text-mbogray-200 uppercase tracking-wide mb-2">
               Built with
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -137,17 +128,16 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Tech Stack */}
         {p.tech_stack.length > 0 && (
           <div className="mb-6">
-            <h2 className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide mb-2">
+            <h2 className="text-sm font-semibold text-mbogray-800 dark:text-mbogray-200 uppercase tracking-wide mb-2">
               Tech stack
             </h2>
             <div className="flex flex-wrap gap-2">
               {p.tech_stack.map((tech) => (
                 <span
                   key={tech}
-                  className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-600"
+                  className="text-xs font-medium px-2.5 py-1 rounded-full bg-mbogray-100 dark:bg-mbogray-800 text-mbogray-600 dark:text-mbogray-400"
                 >
                   {tech}
                 </span>
@@ -156,17 +146,16 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Categories */}
         {p.categories.length > 0 && (
           <div className="mb-6">
-            <h2 className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide mb-2">
+            <h2 className="text-sm font-semibold text-mbogray-800 dark:text-mbogray-200 uppercase tracking-wide mb-2">
               Categories
             </h2>
             <div className="flex flex-wrap gap-2">
               {p.categories.map((cat) => (
                 <span
                   key={cat}
-                  className="text-xs font-medium px-2.5 py-1 rounded-full bg-orange-50 text-[#FF6B35]"
+                  className="text-xs font-medium px-2.5 py-1 rounded-full bg-accent/10 text-accent"
                 >
                   {cat}
                 </span>
@@ -175,11 +164,21 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Maker Info */}
+        {p.released_at && (
+          <div className="mb-6">
+            <h2 className="text-sm font-semibold text-mbogray-800 dark:text-mbogray-200 uppercase tracking-wide mb-2">
+              Released
+            </h2>
+            <p className="text-sm text-mbogray-600 dark:text-mbogray-400">
+              {new Date(p.released_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+          </div>
+        )}
+
         {(p.maker_name || p.maker_twitter) && (
           <div className="mb-8 flex items-center gap-3">
             {p.maker_avatar_url && (
-              <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-100">
+              <div className="relative w-10 h-10 rounded-full overflow-hidden bg-mbogray-100 dark:bg-mbogray-700">
                 <Image
                   src={p.maker_avatar_url}
                   alt={p.maker_name || 'Maker'}
@@ -190,26 +189,26 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </div>
             )}
             <div>
-              <p className="text-sm text-gray-400">Made by</p>
+              <p className="text-sm text-mbogray-400 dark:text-mbogray-500">Made by</p>
               <div className="flex items-center gap-2">
                 {p.maker_url ? (
                   <a
                     href={p.maker_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-medium text-[#1a1a1a] hover:text-[#FF6B35] transition-colors"
+                    className="text-sm font-medium text-mbogray-800 dark:text-mbogray-200 hover:text-accent transition-colors"
                   >
                     {p.maker_name || 'Unknown'}
                 </a>
               ) : (
-                <p className="text-sm font-medium text-[#1a1a1a]">{p.maker_name || 'Unknown'}</p>
+                <p className="text-sm font-medium text-mbogray-800 dark:text-mbogray-200">{p.maker_name || 'Unknown'}</p>
               )}
               {p.maker_twitter && (
                 <a
                   href={`https://x.com/${p.maker_twitter.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium text-[#FF6B35] hover:underline"
+                  className="text-sm font-medium text-accent hover:underline"
                 >
                   {p.maker_twitter}
                 </a>
@@ -219,16 +218,58 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Engagement Buttons */}
-        <div className="flex items-center gap-3 mb-12">
+        <div className="flex items-center gap-3 mb-8">
           <UpvoteButton productId={p.id} initialCount={p.upvotes_count} />
           <LikeButton productId={p.id} initialCount={p.likes_count} />
         </div>
 
-        {/* Similar Products */}
+        {/* X Engagement */}
+        {p.x_post_url && (p.x_likes > 0 || p.x_reposts > 0 || p.x_views > 0) && (
+          <div className="mb-12">
+            <h2 className="text-sm font-semibold text-mbogray-800 dark:text-mbogray-200 uppercase tracking-wide mb-3">
+              Engagement on X
+            </h2>
+            <a
+              href={p.x_post_url}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="inline-flex items-center gap-4 rounded-xl border border-mbogray-200 dark:border-mbogray-700 bg-white dark:bg-mbogray-800 px-5 py-3 hover:border-mbogray-300 dark:hover:border-mbogray-600 transition-colors"
+            >
+              <svg className="w-4 h-4 text-mbogray-800 dark:text-mbogray-200 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+              {p.x_views > 0 && (
+                <div className="text-center">
+                  <p className="text-lg font-bold text-mbogray-900 dark:text-white">{p.x_views >= 1000 ? `${(p.x_views / 1000).toFixed(1).replace(/\.0$/, '')}k` : p.x_views}</p>
+                  <p className="text-[11px] text-mbogray-500 dark:text-mbogray-400">views</p>
+                </div>
+              )}
+              {p.x_likes > 0 && (
+                <div className="text-center">
+                  <p className="text-lg font-bold text-mbogray-900 dark:text-white">{p.x_likes >= 1000 ? `${(p.x_likes / 1000).toFixed(1).replace(/\.0$/, '')}k` : p.x_likes}</p>
+                  <p className="text-[11px] text-mbogray-500 dark:text-mbogray-400">likes</p>
+                </div>
+              )}
+              {p.x_reposts > 0 && (
+                <div className="text-center">
+                  <p className="text-lg font-bold text-mbogray-900 dark:text-white">{p.x_reposts >= 1000 ? `${(p.x_reposts / 1000).toFixed(1).replace(/\.0$/, '')}k` : p.x_reposts}</p>
+                  <p className="text-[11px] text-mbogray-500 dark:text-mbogray-400">reposts</p>
+                </div>
+              )}
+              {p.x_replies > 0 && (
+                <div className="text-center">
+                  <p className="text-lg font-bold text-mbogray-900 dark:text-white">{p.x_replies >= 1000 ? `${(p.x_replies / 1000).toFixed(1).replace(/\.0$/, '')}k` : p.x_replies}</p>
+                  <p className="text-[11px] text-mbogray-500 dark:text-mbogray-400">replies</p>
+                </div>
+              )}
+              <span className="text-xs text-mbogray-400 dark:text-mbogray-500 ml-1">View post &rarr;</span>
+            </a>
+          </div>
+        )}
+
         {similarProducts.length > 0 && (
           <section>
-            <h2 className="text-xl font-semibold text-[#1a1a1a] mb-6">
+            <h2 className="text-xl font-semibold text-mbogray-900 dark:text-white mb-6">
               Similar products
             </h2>
             <ProductGrid products={similarProducts} />

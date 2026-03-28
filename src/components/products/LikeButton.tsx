@@ -9,10 +9,12 @@ export function LikeButton({
   productId,
   initialCount,
   initialLiked = false,
+  variant = 'default',
 }: {
   productId: string;
   initialCount: number;
   initialLiked?: boolean;
+  variant?: 'default' | 'card';
 }) {
   const { user } = useAuth();
   const router = useRouter();
@@ -56,14 +58,28 @@ export function LikeButton({
     setLoading(false);
   };
 
+  const isCard = variant === 'card';
+
   return (
     <button
       onClick={handleClick}
-      className="flex items-center gap-1 text-xs text-gray-400 hover:text-accent transition-colors shrink-0"
+      className={`flex flex-none cursor-pointer items-center justify-center rounded-full transition-colors select-none ${
+        isCard
+          ? `w-9 h-9 ${
+              liked
+                ? 'bg-accent/20 text-accent'
+                : 'bg-mbogray-800/80 dark:bg-mbogray-700/90 text-mbogray-300 dark:text-mbogray-400 hover:bg-mbogray-700 dark:hover:bg-mbogray-600'
+            }`
+          : `h-8 w-8 border ${
+              liked
+                ? 'border-accent bg-accent/10 text-accent'
+                : 'border-mbogray-200 dark:border-mbogray-700 bg-white dark:bg-mbogray-800 text-mbogray-400 dark:text-mbogray-500 hover:bg-mbogray-50 dark:hover:bg-mbogray-700 hover:text-accent'
+            }`
+      }`}
       aria-label={liked ? 'Unlike' : 'Like'}
     >
       <svg
-        className={`w-4 h-4 ${liked ? 'text-accent fill-accent' : ''}`}
+        className={isCard ? 'w-4 h-4' : 'w-3.5 h-3.5'}
         fill={liked ? 'currentColor' : 'none'}
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -75,7 +91,6 @@ export function LikeButton({
           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
         />
       </svg>
-      {count > 0 && <span>{count}</span>}
     </button>
   );
 }
