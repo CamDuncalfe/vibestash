@@ -26,13 +26,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!product) return { title: 'Product Not Found' };
 
+  const desc = product.description || `Check out ${product.title} on VibeStash.`;
+  const ogImage = product.thumbnail_url
+    || `/api/og?title=${encodeURIComponent(product.title)}&desc=${encodeURIComponent(desc.substring(0, 100))}`;
+
   return {
     title: `${product.title} — VibeStash`,
-    description: product.description || `Check out ${product.title} on VibeStash.`,
+    description: desc,
     openGraph: {
       title: product.title,
-      description: product.description || undefined,
-      images: product.thumbnail_url ? [product.thumbnail_url] : undefined,
+      description: desc,
+      images: [ogImage],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.title,
+      description: desc,
+      images: [ogImage],
     },
   };
 }
