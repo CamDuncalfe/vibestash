@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { FAQ } from '@/components/ui/FAQ';
 
 export const metadata: Metadata = {
   title: 'Support VibeStash',
@@ -129,6 +130,32 @@ export default function SupportersPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-16">
+        <h2 className="text-xl font-bold text-mbogray-900 dark:text-white mb-6">
+          Frequently asked questions
+        </h2>
+        <FAQ
+          items={[
+            {
+              question: 'Is VibeStash really free?',
+              answer: 'Yes! Browse, discover, and upvote products completely free. Supporter tiers add extra features like unlimited favorites and private collections.',
+            },
+            {
+              question: 'What counts as a vibe-coded product?',
+              answer: 'Products built primarily using AI-assisted coding tools like Cursor, Claude, ChatGPT, Bolt, Lovable, Replit, or v0. The product should be live and usable.',
+            },
+            {
+              question: 'Can I cancel my supporter plan?',
+              answer: 'Anytime. No questions asked. You keep access until the end of your billing period.',
+            },
+            {
+              question: 'How do I submit a product?',
+              answer: 'Sign in with Google or X, then visit the Submit page. We review every submission manually to keep quality high.',
+            },
+          ]}
+        />
       </div>
     </main>
   );

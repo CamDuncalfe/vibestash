@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Product, Category } from '@/types';
 import { ProductGrid } from '@/components/products/ProductGrid';
 import { Pagination } from '@/components/products/Pagination';
+import { NewsletterCTA } from './NewsletterCTA';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -164,7 +165,14 @@ export function HomeContent({
         </section>
 
         <section className="min-h-[400px]">
-          {isLoading ? <GridSkeleton /> : <ProductGrid products={products} />}
+          {isLoading ? (
+            <GridSkeleton />
+          ) : (
+            <ProductGrid
+              products={products}
+              insertAfter={{ index: 8, node: <NewsletterCTA /> }}
+            />
+          )}
         </section>
 
         {totalPages > 1 && (

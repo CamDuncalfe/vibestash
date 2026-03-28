@@ -5,6 +5,26 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/components/auth/AuthProvider';
 import type { Tool } from '@/types';
+import { FAQ } from '@/components/ui/FAQ';
+
+const submitFAQ = [
+  {
+    question: 'Is it free to submit?',
+    answer: 'Yes, completely free. We want to showcase the best vibe-coded products regardless of budget.',
+  },
+  {
+    question: 'How long does review take?',
+    answer: 'Usually 1-2 business days. We manually review every submission to ensure quality.',
+  },
+  {
+    question: 'What makes a good submission?',
+    answer: 'A live, working product built with AI-assisted coding tools. Include your maker profile and the tools you used for the best listing.',
+  },
+  {
+    question: 'Can I edit my submission later?',
+    answer: 'Not yet, but we are working on maker profiles. For now, reach out to us if you need changes.',
+  },
+];
 
 export default function SubmitPage() {
   const { user, loading: authLoading } = useAuth();
@@ -187,6 +207,13 @@ export default function SubmitPage() {
             {submitting ? 'Submitting...' : 'Submit product'}
           </button>
         </form>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="text-xl font-bold text-mbogray-900 dark:text-white mb-6">
+          Frequently asked questions
+        </h2>
+        <FAQ items={submitFAQ} />
       </div>
     </main>
   );

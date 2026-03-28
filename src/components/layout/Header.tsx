@@ -64,6 +64,9 @@ export function Header() {
       <Link href="/supporters" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
         Sponsor
       </Link>
+      <Link href="/subscribe" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-accent transition-colors block">
+        Subscribe
+      </Link>
       {isAdmin && flaggedCount > 0 && (
         <Link href="/review" className="px-3 py-3 md:py-5 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1">
           Review
