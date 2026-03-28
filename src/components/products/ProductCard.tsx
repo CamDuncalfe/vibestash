@@ -83,6 +83,19 @@ export function ProductCard({ product }: { product: Product; showFeaturedBadge?:
               </div>
             )}
 
+            {/* Play icon indicator for video cards */}
+            {product.video_url && (
+              <div
+                className={`absolute top-2 right-2 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white/60 text-white transition-opacity duration-200 ${
+                  isHovering ? 'opacity-0' : 'opacity-70'
+                }`}
+              >
+                <svg className="w-3 h-3 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            )}
+
             {/* Video on hover */}
             {product.video_url && isHovering && (
               <video

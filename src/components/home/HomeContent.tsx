@@ -146,6 +146,20 @@ export function HomeContent({
     });
   };
 
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+
+    const params = new URLSearchParams();
+    if (activeSlug) params.set('category', activeSlug);
+    if (page > 1) params.set('page', page.toString());
+    const url = params.toString() ? `/?${params.toString()}` : '/';
+    window.history.pushState(null, '', url);
+
+    startTransition(() => {
+      fetchProducts(activeSlug, page);
+    });
+  }, [activeSlug, fetchProducts, startTransition]);
+
   // Handle pagination from URL (back/forward)
   useEffect(() => {
     const handlePopState = () => {
@@ -179,7 +193,7 @@ export function HomeContent({
 
         {totalPages > 1 && (
           <div className="mt-12 mb-12">
-            <Pagination currentPage={currentPage} totalPages={totalPages} />
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </div>
         )}
       </div>

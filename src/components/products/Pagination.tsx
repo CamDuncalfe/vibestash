@@ -5,9 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export function Pagination({
   currentPage,
   totalPages,
+  onPageChange,
 }: {
   currentPage: number;
   totalPages: number;
+  onPageChange?: (page: number) => void;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -15,9 +17,13 @@ export function Pagination({
   if (totalPages <= 1) return null;
 
   const goToPage = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', page.toString());
-    router.push(`?${params.toString()}`);
+    if (onPageChange) {
+      onPageChange(page);
+    } else {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', page.toString());
+      router.push(`?${params.toString()}`);
+    }
   };
 
   return (
