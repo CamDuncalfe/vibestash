@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { collections } from '@/data/collections';
+import { Sticker } from '@/components/Sticker';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -24,7 +25,7 @@ export default function CollectionsPage() {
             href={`/collections/${col.slug}`}
             className="group flex flex-col gap-2 rounded-2xl border border-mbogray-200 dark:border-mbogray-700 bg-white dark:bg-mbogray-800/50 p-5 hover:border-mbogray-300 dark:hover:border-mbogray-600 hover:bg-mbogray-50 dark:hover:bg-mbogray-800 transition-colors"
           >
-            <span className="text-3xl">{col.emoji}</span>
+            <Sticker emoji={col.emoji} size={36} alt={col.title} />
             <h2 className="text-lg font-semibold text-mbogray-900 dark:text-white group-hover:text-accent transition-colors">
               {col.title}
             </h2>

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { collections } from '@/data/collections';
 import { ProductGrid } from '@/components/products/ProductGrid';
+import { Sticker } from '@/components/Sticker';
 import type { Product } from '@/types';
 import type { Metadata } from 'next';
 
@@ -60,7 +61,7 @@ export default async function CollectionPage({
       </Link>
 
       <div className="flex items-center gap-3 mb-2">
-        <span className="text-3xl">{collection.emoji}</span>
+        <Sticker emoji={collection.emoji} size={36} alt={collection.title} />
         <h1 className="text-2xl font-bold text-mbogray-900 dark:text-white">
           {collection.title}
         </h1>

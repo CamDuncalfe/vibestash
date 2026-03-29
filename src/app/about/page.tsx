@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Sticker } from '@/components/Sticker';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -75,7 +76,7 @@ export default function AboutPage() {
 
       <div className="mt-12">
         <h3 className="text-lg font-semibold text-mbogray-900 dark:text-white mb-3">
-          want in? 🚀
+          want in? <Sticker emoji="🚀" size={28} className="ml-1" />
         </h3>
         <p className="text-[17px] text-mbogray-600 dark:text-amber-100/70 mb-6">
           submit your project. or just come browse. we add new stuff constantly.

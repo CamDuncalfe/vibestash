@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { Sticker } from '@/components/Sticker';
 import { createClient } from '@/lib/supabase/client';
 import type { Product } from '@/types';
 
@@ -150,7 +151,7 @@ export default function ReviewPage() {
         {products.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-mbogray-500 dark:text-mbogray-400 text-lg">
-              No flagged products. All clear! 🎉
+              No flagged products. All clear! <Sticker emoji="🎉" size={24} className="ml-1" />
             </p>
           </div>
         ) : (

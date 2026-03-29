@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { collections } from '@/data/collections';
+import { Sticker } from '@/components/Sticker';
 
 export function CollectionsRow() {
   return (
@@ -22,7 +23,7 @@ export function CollectionsRow() {
             href={`/collections/${col.slug}`}
             className="flex-none flex items-center gap-2 rounded-xl border border-mbogray-700 bg-mbogray-800/50 px-4 py-2.5 hover:border-mbogray-600 hover:bg-mbogray-800 transition-colors"
           >
-            <span className="text-lg">{col.emoji}</span>
+            <Sticker emoji={col.emoji} size={22} alt={col.title} />
             <div className="min-w-0">
               <span className="text-sm font-medium text-mbogray-200 whitespace-nowrap">
                 {col.title}
