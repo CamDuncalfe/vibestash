@@ -48,6 +48,7 @@
 - Creative/weird tools (MenuGen, Tower of Time, Sandboxels)
 - Playful tech demos (Dog-e-dex, Bitchat)
 - Vibe-coded meme apps
+- Random tools, games, utilities that would never exist without vibe coding
 
 #### ARCHIVE (Not Day 1)
 - Generic productivity SaaS
@@ -55,6 +56,13 @@
 - Standard templates
 - Boring utilities
 - Enterprise software
+- **🚨 AI agent/wrapper websites** — unless they're funny/absurd. VibeStash is for random tools, weird apps, fun games. Not another AI SaaS. (Rule from Cam, 2026-03-29)
+
+#### MEDIA RULES (from Cam, 2026-03-29)
+- **Thumbnails must actually show the product** — no generic OG images, no text-only fallbacks
+- **Videos must show the product in action** — not a marketing splash
+- **All thumbnails must be the same size** — nothing cropped, consistent aspect ratio across cards
+- **All videos must be the same size** — same aspect ratio, fits cleanly in the card
 
 ### Known Good Products (Cam's Examples)
 1. **SlapMac** — Mac moan app, $5K in 3 days (@anulagarwal)

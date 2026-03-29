@@ -180,15 +180,7 @@ export function ProductCard({ product }: { product: Product; showFeaturedBadge?:
                 </span>
               </a>
             )}
-            {(product.maker_name || product.maker_twitter) && product.tools_used.length > 0 && (
-              <span className="text-mbogray-300 dark:text-mbogray-600 text-[12px]">·</span>
-            )}
-            {product.tools_used.length > 0 && (
-              <span className="text-mbogray-400 dark:text-mbogray-500 text-[12px] truncate">
-                {product.tools_used.slice(0, 3).join(', ')}
-                {product.tools_used.length > 3 && `, +${product.tools_used.length - 3}`}
-              </span>
-            )}
+
             {product.created_at && (
               <>
                 <span className="text-mbogray-300 dark:text-mbogray-600 text-[12px]">·</span>
