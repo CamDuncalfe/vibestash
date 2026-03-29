@@ -75,9 +75,11 @@ async function screenshotProduct(url, slug) {
       mobile: false
     });
 
-    // Navigate
+    // Navigate with timeout
     await cdp.send('Page.enable');
-    await cdp.send('Page.navigate', { url });
+    const navPromise = cdp.send('Page.navigate', { url });
+    const navTimeout = new Promise((_, rej) => setTimeout(() => rej(new Error('Navigation timeout')), 15000));
+    await Promise.race([navPromise, navTimeout]);
 
     // Wait for load + extra time for JS rendering
     await new Promise(r => setTimeout(r, LOAD_WAIT));
@@ -117,7 +119,7 @@ async function screenshotProduct(url, slug) {
 
 async function main() {
   const args = process.argv.slice(2);
-  let limit = 20;
+  let limit = 200;
   let startFrom = null;
 
   for (let i = 0; i < args.length; i++) {
@@ -128,6 +130,7 @@ async function main() {
   // Get products missing thumbnails
   let query = sb.from('products')
     .select('id,title,url,slug')
+    .eq('approved', true)
     .is('thumbnail_url', null)
     .order('title');
 
@@ -152,7 +155,10 @@ async function main() {
     }
 
     try {
-      const publicUrl = await screenshotProduct(p.url, p.slug);
+      const publicUrl = await Promise.race([
+        screenshotProduct(p.url, p.slug),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('Product timeout (30s)')), 30000))
+      ]);
 
       // Update product
       const { error: updateErr } = await sb.from('products')
