@@ -35,8 +35,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <h3 className="text-lg font-bold tracking-tight text-mbogray-900 dark:text-white">VibeStash</h3>
             <p className="mt-2 text-sm text-mbogray-500 dark:text-mbogray-400 max-w-md">
-              A curated gallery of the best vibe-coded apps and products.
-              Discover software built with AI tools.
+              the weird stuff people ship at 3am. we collect it so you don&apos;t have to scroll X for 4 hours.
             </p>
             <form onSubmit={handleSubscribe} className="mt-4 flex gap-2">
               <input

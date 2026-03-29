@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Collections — VibeStash',
-  description: 'Curated collections of the best vibe-coded products',
+  description: 'Hand-picked rabbit holes of vibe-coded products',
 };
 
 export default function CollectionsPage() {
@@ -15,7 +15,7 @@ export default function CollectionsPage() {
         Collections
       </h1>
       <p className="text-mbogray-500 dark:text-mbogray-400 mb-8">
-        Curated lists of the best vibe-coded products
+        hand-picked rabbit holes. you&apos;re welcome.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

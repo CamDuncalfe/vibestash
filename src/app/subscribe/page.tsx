@@ -4,7 +4,7 @@ import { SubscribeContent } from './SubscribeContent';
 
 export const metadata: Metadata = {
   title: 'Subscribe — VibeStash',
-  description: 'Get the best new vibe-coded products in your inbox every week. Free, curated, no spam.',
+  description: 'New vibe-coded drops in your inbox every week. Free. No spam. Just the good stuff.',
 };
 
 export default async function SubscribePage() {

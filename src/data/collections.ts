@@ -12,7 +12,7 @@ export const collections: CollectionConfig[] = [
     id: 'staff-picks',
     title: 'Staff Picks',
     slug: 'staff-picks',
-    description: 'Our favorites from the VibeStash collection',
+    description: 'the ones we keep going back to',
     emoji: '⭐',
     productSlugs: [
       'menugen',
@@ -31,7 +31,7 @@ export const collections: CollectionConfig[] = [
     id: 'most-viral',
     title: 'Most Viral',
     slug: 'most-viral',
-    description: 'Highest engagement on X',
+    description: 'blew up on X. millions of eyeballs.',
     emoji: '🔥',
     productSlugs: [
       'slapmac',
@@ -50,7 +50,7 @@ export const collections: CollectionConfig[] = [
     id: 'making-money',
     title: 'Making Money',
     slug: 'making-money',
-    description: 'Vibe-coded products with actual revenue',
+    description: 'vibe coded and somehow printing money',
     emoji: '💰',
     productSlugs: [
       'inthebulletin',
@@ -68,7 +68,7 @@ export const collections: CollectionConfig[] = [
     id: 'ai-games',
     title: 'AI Games',
     slug: 'ai-games',
-    description: 'Games built entirely with AI coding tools',
+    description: 'games that have no business being this fun',
     emoji: '🎮',
     productSlugs: [
       'scorpio-survival-ai',
@@ -87,7 +87,7 @@ export const collections: CollectionConfig[] = [
     id: 'built-in-a-weekend',
     title: 'Built in a Weekend',
     slug: 'built-in-a-weekend',
-    description: 'Shipped in 48 hours or less. Speed is the vibe.',
+    description: 'friday night idea, sunday morning launch',
     emoji: '⚡',
     productSlugs: [
       'slapmac',
@@ -106,7 +106,7 @@ export const collections: CollectionConfig[] = [
     id: 'absurdly-fun',
     title: 'Absurdly Fun',
     slug: 'absurdly-fun',
-    description: 'No utility. No business model. Pure internet chaos.',
+    description: 'no utility. no business model. just vibes.',
     emoji: '🤪',
     productSlugs: [
       'slapmac',
@@ -127,7 +127,7 @@ export const collections: CollectionConfig[] = [
     id: 'built-with-lovable',
     title: 'Built with Lovable',
     slug: 'built-with-lovable',
-    description: 'Products made with Lovable (formerly GPT Engineer)',
+    description: 'the lovable kids are eating',
     emoji: '💜',
     productSlugs: [
       'quickpitch',
@@ -147,7 +147,7 @@ export const collections: CollectionConfig[] = [
     id: 'claude-code-club',
     title: 'Claude Code Club',
     slug: 'claude-code-club',
-    description: 'Built with Claude Code or Codex. Terminal vibes only.',
+    description: 'terminal kids who talk to claude at 2am',
     emoji: '🧡',
     productSlugs: [
       'notchy',
@@ -166,7 +166,7 @@ export const collections: CollectionConfig[] = [
     id: 'internet-classics',
     title: 'Internet Classics',
     slug: 'internet-classics',
-    description: 'The OG weird internet experiments that inspired vibe coding',
+    description: 'before it had a name, these were the vibes',
     emoji: '🌐',
     productSlugs: [
       'windows93',
@@ -187,7 +187,7 @@ export const collections: CollectionConfig[] = [
     id: 'actually-useful',
     title: 'Actually Useful',
     slug: 'actually-useful',
-    description: 'Vibe-coded and you might actually use them daily',
+    description: 'wait these are actually... good?',
     emoji: '🛠️',
     productSlugs: [
       'menugen',

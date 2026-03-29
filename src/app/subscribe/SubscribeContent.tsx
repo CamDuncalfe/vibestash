@@ -50,7 +50,7 @@ export function SubscribeContent({ recentProducts }: { recentProducts: RecentPro
           Never miss a vibe
         </h1>
         <p className="mt-3 text-mbogray-500 dark:text-mbogray-400 max-w-md mx-auto">
-          Every week we handpick the best new vibe-coded products and deliver them straight to your inbox.
+          new drops every week. the weird, the wild, and the weirdly useful. straight to your inbox.
         </p>
       </div>
 
