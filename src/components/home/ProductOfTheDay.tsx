@@ -15,8 +15,9 @@ export function ProductOfTheDay({ product }: { product: Product }) {
       >
         {/* Thumbnail */}
         <div className="relative w-full md:w-80 lg:w-96 shrink-0">
-          <Image
-              src={product.thumbnail_url || `/api/og?title=${encodeURIComponent(product.title)}&desc=${encodeURIComponent((product.description || '').substring(0, 100))}`}
+          {product.thumbnail_url ? (
+            <Image
+              src={product.thumbnail_url}
               alt={product.title}
               width={700}
               height={438}
@@ -24,6 +25,14 @@ export function ProductOfTheDay({ product }: { product: Product }) {
               sizes="(max-width: 768px) 100vw, 384px"
               priority
             />
+          ) : (
+            <div className="aspect-[16/10] md:h-full w-full bg-gradient-to-br from-mbogray-800 via-mbogray-900 to-mbogray-800 flex items-center justify-center">
+              <div className="text-center px-6">
+                <span className="text-4xl md:text-5xl">🏆</span>
+                <p className="text-mbogray-500 text-sm mt-2 font-medium">Product of the Day</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Content */}
