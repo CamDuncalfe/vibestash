@@ -45,7 +45,9 @@ export default async function Page({
   if (allProducts && categories) {
     for (const product of allProducts) {
       for (const catName of product.categories || []) {
-        const cat = (categories as Category[]).find((c) => c.name === catName);
+        const cat = (categories as Category[]).find(
+          (c) => c.name.toLowerCase() === catName.toLowerCase()
+        );
         if (cat) {
           productCounts[cat.slug] = (productCounts[cat.slug] || 0) + 1;
         }
@@ -91,13 +93,15 @@ export default async function Page({
 
   const { data: products, count } = await query;
 
-  // Product of the Day: deterministic daily pick
+  // Product of the Day: deterministic daily pick (only products with video+thumbnail)
   let potdProduct: Product | null = null;
   const { data: approvedIds } = await supabase
     .from('products')
     .select('id')
     .eq('approved', true)
-    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false');
+    .or('flagged_for_removal.is.null,flagged_for_removal.eq.false')
+    .not('video_url', 'is', null)
+    .not('thumbnail_url', 'is', null);
 
   if (approvedIds && approvedIds.length > 0) {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD

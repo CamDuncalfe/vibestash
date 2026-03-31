@@ -61,8 +61,8 @@ export function Header() {
       <Link href="/submit" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
         Submit
       </Link>
-      <Link href="/supporters" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
-        Sponsor
+      <Link href="/products/popular" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
+        Popular
       </Link>
       <Link href="/subscribe" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-accent transition-colors block">
         Subscribe

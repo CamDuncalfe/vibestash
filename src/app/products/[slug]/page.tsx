@@ -8,7 +8,7 @@ import { ProductGrid } from '@/components/products/ProductGrid';
 import { ToolBadge } from '@/components/tools/ToolBadge';
 import { LikeButton } from '@/components/products/LikeButton';
 import { UpvoteButton } from '@/components/products/UpvoteButton';
-import { ScreenshotGallery } from '@/components/products/ScreenshotGallery';
+import { ProductMedia } from '@/components/products/ProductMedia';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -82,10 +82,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
     if (data) similarProducts = data as Product[];
   }
 
-  const allScreenshots = [
-    ...(p.thumbnail_url ? [p.thumbnail_url] : []),
-    ...p.screenshots.filter((s) => s !== p.thumbnail_url),
-  ];
+  // allScreenshots kept for ProductMedia fallback
+  const allScreenshots = p.screenshots.filter((s) => s !== p.thumbnail_url);
 
   const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -125,11 +123,14 @@ export default async function ProductDetailPage({ params }: PageProps) {
           Back to all products
         </Link>
 
-        {allScreenshots.length > 0 && (
-          <div className="mb-8">
-            <ScreenshotGallery screenshots={allScreenshots} title={p.title} />
-          </div>
-        )}
+        <div className="mb-8">
+          <ProductMedia
+            videoUrl={p.video_url}
+            thumbnailUrl={p.thumbnail_url}
+            screenshots={allScreenshots}
+            title={p.title}
+          />
+        </div>
 
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
           <h1 className="text-3xl font-bold text-mbogray-900 dark:text-white">{p.title}</h1>
