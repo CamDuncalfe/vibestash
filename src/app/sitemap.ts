@@ -10,7 +10,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
     { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/collections`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${baseUrl}/tools`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/submit`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.4 },
     { url: `${baseUrl}/subscribe`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
     { url: `${baseUrl}/supporters`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
@@ -49,25 +48,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap: failed to fetch products', e);
   }
 
-  // Tool pages - fetch distinct tools from products
-  let toolPages: MetadataRoute.Sitemap = [];
-  try {
-    const supabase = await createClient();
-    const { data: tools } = await supabase
-      .from('tools')
-      .select('slug');
-
-    if (tools) {
-      toolPages = tools.map((t) => ({
-        url: `${baseUrl}/tools/${t.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.6,
-      }));
-    }
-  } catch (e) {
-    // Tools table might not exist; skip silently
-  }
-
-  return [...staticPages, ...collectionPages, ...productPages, ...toolPages];
+  return [...staticPages, ...collectionPages, ...productPages];
 }

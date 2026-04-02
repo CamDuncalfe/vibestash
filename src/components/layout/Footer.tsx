@@ -67,7 +67,6 @@ export function Footer() {
               <li><Link href="/" className="text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-accent transition-colors">Explore</Link></li>
               <li><Link href="/products/popular" className="text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-accent transition-colors">Popular</Link></li>
               <li><Link href="/products/picks" className="text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-accent transition-colors">Picks</Link></li>
-              <li><Link href="/tools" className="text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-accent transition-colors">Tools</Link></li>
             </ul>
           </div>
           <div>

@@ -55,14 +55,11 @@ export function Header() {
       <Link href="/" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
         Explore
       </Link>
-      <Link href="/tools" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
-        Tools
+      <Link href="/products/popular" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
+        Popular
       </Link>
       <Link href="/submit" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
         Submit
-      </Link>
-      <Link href="/products/popular" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-mbogray-900 dark:hover:text-white transition-colors block">
-        Popular
       </Link>
       <Link href="/subscribe" className="px-3 py-3 md:py-5 text-sm text-mbogray-500 dark:text-mbogray-400 hover:text-accent transition-colors block">
         Subscribe

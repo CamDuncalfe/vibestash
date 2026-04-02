@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
 import type { Product } from '@/types';
 import { ProductGrid } from '@/components/products/ProductGrid';
-import { ToolBadge } from '@/components/tools/ToolBadge';
+
 import { LikeButton } from '@/components/products/LikeButton';
 import { UpvoteButton } from '@/components/products/UpvoteButton';
 import { ProductMedia } from '@/components/products/ProductMedia';
@@ -160,7 +160,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             </h2>
             <div className="flex flex-wrap gap-2">
               {p.tools_used.map((tool) => (
-                <ToolBadge key={tool} name={tool} />
+                <span key={tool} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-mbogray-100 dark:bg-mbogray-800 text-mbogray-700 dark:text-mbogray-300">{tool}</span>
               ))}
             </div>
           </div>
