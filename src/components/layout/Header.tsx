@@ -100,7 +100,10 @@ export function Header() {
             )}
           </button>
 
-          <Link href="/" className="flex items-center shrink-0">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center">
+              <span className="text-white text-sm font-bold leading-none">V</span>
+            </div>
             <span className="text-xl font-bold tracking-tight text-mbogray-900 dark:text-white">VibeStash</span>
           </Link>
 

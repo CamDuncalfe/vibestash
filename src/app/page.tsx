@@ -1,8 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Product, Category } from '@/types';
 import { HomeContent } from '@/components/home/HomeContent';
-import { ProductOfTheDay } from '@/components/home/ProductOfTheDay';
-import { CollectionsRow } from '@/components/home/CollectionsRow';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -87,8 +85,10 @@ export default async function Page({
     query = query.contains('categories', [activeCategoryName]);
   }
 
+  const isFirstPage = currentPage === 1 && !activeCategory;
+  const fetchCount = isFirstPage ? PRODUCTS_PER_PAGE + 1 : PRODUCTS_PER_PAGE;
   const from = (currentPage - 1) * PRODUCTS_PER_PAGE;
-  const to = from + PRODUCTS_PER_PAGE - 1;
+  const to = from + fetchCount - 1;
   query = query.range(from, to);
 
   const { data: products, count } = await query;
@@ -129,8 +129,6 @@ export default async function Page({
           }),
         }}
       />
-      {potdProduct && <ProductOfTheDay product={potdProduct} />}
-      <CollectionsRow />
       <HomeContent
         initialProducts={(products as Product[]) || []}
         initialTotal={count || 0}
@@ -139,6 +137,8 @@ export default async function Page({
         initialCategory={activeCategory}
         initialPage={currentPage}
         initialSort={sort}
+        showHero
+        potdProduct={potdProduct}
       />
     </>
   );

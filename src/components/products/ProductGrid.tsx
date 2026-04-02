@@ -6,10 +6,12 @@ export function ProductGrid({
   products,
   featured,
   insertAfter,
+  potdId,
 }: {
   products: Product[];
   featured?: boolean;
   insertAfter?: { index: number; node: ReactNode };
+  potdId?: string;
 }) {
   if (products.length === 0) {
     return (
@@ -23,7 +25,11 @@ export function ProductGrid({
     <div className="grid w-full grid-flow-row grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {products.map((product, i) => (
         <Fragment key={product.id}>
-          <ProductCard product={product} showFeaturedBadge={featured} />
+          <ProductCard
+            product={product}
+            showFeaturedBadge={featured}
+            isPotd={product.id === potdId}
+          />
           {insertAfter && i === insertAfter.index - 1 && insertAfter.node}
         </Fragment>
       ))}

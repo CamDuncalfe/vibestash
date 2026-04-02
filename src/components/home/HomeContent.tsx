@@ -131,6 +131,8 @@ export function HomeContent({
   initialCategory,
   initialPage,
   initialSort,
+  showHero = false,
+  potdProduct,
 }: {
   initialProducts: Product[];
   initialTotal: number;
@@ -139,6 +141,8 @@ export function HomeContent({
   initialCategory?: string;
   initialPage: number;
   initialSort?: SortMode;
+  showHero?: boolean;
+  potdProduct?: Product | null;
 }) {
   const [activeSlug, setActiveSlug] = useState(initialCategory);
   const [sortMode, setSortMode] = useState<SortMode>(initialSort || 'trending');
@@ -202,9 +206,29 @@ export function HomeContent({
     setSortMode(initialSort || 'trending');
   }, [initialProducts, initialTotal, initialPage, initialCategory, initialSort]);
 
+  const isFirstPage = currentPage === 1 && !activeSlug;
+
+  // Prepend POTD to the grid on the first page if it's not already in the list
+  const gridProducts = (() => {
+    if (!isFirstPage || !potdProduct) return products;
+    const filtered = products.filter((p) => p.id !== potdProduct.id);
+    return [potdProduct, ...filtered].slice(0, PRODUCTS_PER_PAGE);
+  })();
+
   return (
     <div className="relative min-h-screen">
       <div className="px-4 md:px-6">
+        {showHero && currentPage === 1 && !activeSlug && (
+          <section className="pt-10 pb-2 max-w-2xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-mbogray-900 dark:text-white tracking-tight">
+              Welcome to VibeStash
+            </h1>
+            <p className="mt-3 text-base text-mbogray-500 dark:text-mbogray-400 leading-relaxed">
+              The best apps, tools, and games built with vibe coding. Curated daily, shipped by makers worldwide.
+            </p>
+          </section>
+        )}
+
         <section className="py-6 flex flex-col gap-3">
           <SortTabs active={sortMode} onSelect={handleSortSelect} />
           <CategoryFilter
@@ -220,8 +244,9 @@ export function HomeContent({
             <GridSkeleton />
           ) : (
             <ProductGrid
-              products={products}
+              products={gridProducts}
               insertAfter={{ index: 8, node: <NewsletterCTA /> }}
+              potdId={isFirstPage && potdProduct ? potdProduct.id : undefined}
             />
           )}
         </section>
